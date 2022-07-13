@@ -33,6 +33,7 @@ public class Category : Entity, IValidatable
 
     public void AddProduct(Product product)
     {
+        AddNotifications(product);
         if (!product.IsValid)
             AddNotification("Category.Products", "It is not possible to add this product.");
 

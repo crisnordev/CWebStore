@@ -4,9 +4,7 @@ public class Product : Entity, IValidatable
 {
     private IList<Category> _categories;
 
-    protected Product()
-    {
-    }
+    protected Product() { }
 
     public Product(ProductName productName, Price price, Quantity stockQuantity)
     {
@@ -62,6 +60,7 @@ public class Product : Entity, IValidatable
 
     public void AddCategory(Category category)
     {
+        AddNotifications(category);
         if (!category.IsValid)
             AddNotification("Product.Categories", "It is not possible to add this category.");
 

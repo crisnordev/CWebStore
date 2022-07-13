@@ -5,6 +5,10 @@
     <ProjectReference Include="..\CWebStore.Shared\CWebStore.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="flunt" Version="2.0.5" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

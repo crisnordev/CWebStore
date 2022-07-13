@@ -1,16 +1,8 @@
-﻿namespace CWebStore.Shared.ProductValueObjects.ValueObjects;
+﻿namespace CWebStore.Domain.Commands;
 
-public class CategoryName : ValueObject, IValidatable
+public class CreateCategoryCommand : Notifiable<Notification>, ICommand
 {
-    protected  CategoryName() {}
-    
-    public CategoryName(string name)
-    {
-        Name = name;
-        Validate();
-    }
-
-    public string Name { get; private set; }
+    public string Name { get; set; }
 
     public void Validate()
     {
@@ -22,12 +14,4 @@ public class CategoryName : ValueObject, IValidatable
             .IsGreaterOrEqualsThan(80, Name.Length, "CategoryName.Name",
                 "Category name must have 80 or less characters."));
     }
-
-    public void EditCategoryName(string name)
-    {
-        Name = name;
-        Validate();
-    }
-
-    public override string ToString() => Name;
 }

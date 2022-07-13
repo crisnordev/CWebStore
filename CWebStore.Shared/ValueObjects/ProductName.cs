@@ -20,7 +20,7 @@
                 .IsLowerThan(2, Name.Length, "ProductName.Name",
                     "Product name must have two or more characters.")
                 .IsGreaterThan(120, Name.Length, "ProductName.Name",
-                    "Product name must have 160 or less characters."));
+                    "Product name must have 120 or less characters."));
         }
 
         public override string ToString() => Name;

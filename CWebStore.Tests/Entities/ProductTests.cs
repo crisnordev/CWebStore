@@ -1,4 +1,4 @@
-﻿namespace CWebStore.ProductTests.Entities;
+﻿namespace CWebStore.Tests.Entities;
 
 [TestClass]
 public class ProductTests

@@ -1,6 +1,4 @@
-﻿using CWebStore.Shared.ProductValueObjects.ValueObjects;
-
-namespace CWebStore.Domain.Entities;
+﻿namespace CWebStore.Domain.Entities;
 
 public class Category : Entity, IValidatable
 {

@@ -1,7 +1,4 @@
-﻿using CWebStore.Shared.Interfaces;
-using Flunt.Validations;
-
-namespace CWebStore.Shared.ValueObjects
+﻿namespace CWebStore.Shared.ValueObjects
 {
     public class Manufacturer : ValueObject, IValidatable
     {

@@ -1,4 +1,4 @@
-﻿namespace CWebStore.Tests.ValueObjects;
+﻿namespace CWebStore.Tests.ValueObjects.CategoryValueObjectsTests;
 
 [TestClass]
 public class CategoryNameTests

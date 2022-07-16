@@ -2,6 +2,14 @@
 
 public class CreateCategoryCommand : Notifiable<Notification>, ICommand
 {
+    public CreateCategoryCommand() { }
+
+    public CreateCategoryCommand(string name)
+    {
+        Name = name;
+        Validate();
+    }
+
     public string Name { get; set; }
 
     public void Validate()

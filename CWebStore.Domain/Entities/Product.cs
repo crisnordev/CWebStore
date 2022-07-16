@@ -54,82 +54,99 @@ public class Product : Entity, IValidatable
     {
         AddNotifications(ProductName, Description, Manufacturer, StockQuantity, Price,
             ImageFileName, ImageUrl);
+        
         foreach (var category in Categories)
             AddNotifications(category);
     }
 
     public void AddCategory(Category category)
     {
-        AddNotifications(category);
+        category.Validate();
+        
         if (!category.IsValid)
-            AddNotification("Product.Categories", "It is not possible to add this category.");
+            AddNotifications(category);
 
         else if (_categories.Any(x => x.Id == category.Id))
             AddNotification("Product.Categories", "This category has already been added.");
 
         else
             _categories.Add(category);
+    }
+    
+    public void RemoveCategory(Category category)
+    {
+        category.Validate();
+        
+        if (!category.IsValid)
+            AddNotifications(category);
 
-        Validate();
+        else if (_categories.All(x => x.Id != category.Id))
+            AddNotification("Product.Categories", "Can not find this category.");
+
+        else
+            _categories.Add(category);
     }
 
     public void EditProductName(ProductName name)
     {
+        name.Validate();
+        
         if (!name.IsValid)
             AddNotifications(name);
 
         else
             ProductName = name;
-
-        Validate();
     }
 
     public void EditProductPrice(Price price)
     {
+        price.Validate();
+        
         if (!price.IsValid)
             AddNotifications(price);
 
         else
             Price = price;
-
-        Validate();
     }
 
     public void EditProductStockQuantity(Quantity quantity)
     {
+        quantity.Validate();
+        
         if (!quantity.IsValid)
             AddNotifications(quantity);
 
         else
             StockQuantity = quantity;
-
-        Validate();
     }
 
     public void EditProductDescription(ProductDescription description)
     {
+        description.Validate();
+        
         if (!description.IsValid)
             AddNotifications(description);
 
         else
             Description = description;
-
-        Validate();
     }
 
     public void EditProductManufacturer(Manufacturer manufacturer)
     {
+        manufacturer.Validate();
+        
         if (!manufacturer.IsValid)
             AddNotifications(manufacturer);
 
         else
             Manufacturer = manufacturer;
-
-        Validate();
     }
 
     public void EditProductImage(FileName fileName, UrlString url)
     {
+        fileName.Validate();
+        url.Validate();
+        
         if (!fileName.IsValid || !url.IsValid)
             AddNotifications(fileName, url);
 
@@ -138,7 +155,5 @@ public class Product : Entity, IValidatable
             ImageFileName = fileName;
             ImageUrl = url;
         }
-
-        Validate();
     }
 }

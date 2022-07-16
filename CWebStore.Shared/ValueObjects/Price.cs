@@ -12,6 +12,13 @@ public class Price : ValueObject, IValidatable
         Validate();
     }
 
+    public Price(decimal buyValue, decimal percentage)
+    {
+        SellValue = buyValue + buyValue * percentage;
+        BuyValue = buyValue;
+        Percentage = percentage;
+    }
+
     public decimal SellValue { get; private set; }
 
     public decimal BuyValue { get; private set; }

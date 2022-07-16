@@ -2,11 +2,53 @@
 
 public class CreateProductCommand : Notifiable<Notification>, ICommand
 {
-    public string ProductName { get; private set; }
+    public CreateProductCommand() { }
+
+    public CreateProductCommand(string productName, string productDescription, string manufacturerName, decimal sellValue, int stockQuantity, string imageFileName, string imageUrl)
+    {
+        ProductName = productName;
+        ProductDescription = productDescription;
+        ManufacturerName = manufacturerName;
+        SellValue = sellValue;
+        StockQuantity = stockQuantity;
+        ImageFileName = imageFileName;
+        ImageUrl = imageUrl;
+        Validate();
+    }
+
+    public CreateProductCommand(string productName, string productDescription, string manufacturerName, decimal buyValue, decimal percentage, int stockQuantity, string imageFileName, string imageUrl)
+    {
+        ProductName = productName;
+        ProductDescription = productDescription;
+        ManufacturerName = manufacturerName;
+        SellValue = buyValue + buyValue * percentage;
+        BuyValue = buyValue;
+        Percentage = percentage;
+        StockQuantity = stockQuantity;
+        ImageFileName = imageFileName;
+        ImageUrl = imageUrl;
+        Validate();
+    }
+
+    public CreateProductCommand(string productName, string productDescription, string manufacturerName, decimal sellValue, decimal buyValue, decimal percentage, int stockQuantity, string imageFileName, string imageUrl)
+    {
+        ProductName = productName;
+        ProductDescription = productDescription;
+        ManufacturerName = manufacturerName;
+        SellValue = sellValue;
+        BuyValue = buyValue;
+        Percentage = percentage;
+        StockQuantity = stockQuantity;
+        ImageFileName = imageFileName;
+        ImageUrl = imageUrl;
+        Validate();
+    }
+
+    public string ProductName { get; set; }
     
-    public string ProductDescription { get; private set; }
+    public string ProductDescription { get; set; }
     
-    public string ManufacturerName { get; private set; }
+    public string ManufacturerName { get; set; }
     
     public decimal SellValue { get; private set; }
 
@@ -14,9 +56,9 @@ public class CreateProductCommand : Notifiable<Notification>, ICommand
 
     public decimal Percentage { get; private set; }
     
-    public int StockQuantity { get; private set; }
+    public int StockQuantity { get; set; }
     
-    public string ImageFileName { get; private set; }
+    public string ImageFileName { get; set; }
 
     public string ImageUrl { get; set; }
 
@@ -71,5 +113,12 @@ public class CreateProductCommand : Notifiable<Notification>, ICommand
                 "Quantity must not be lower or equals 0.")
             .IsGreaterThan(1000000, StockQuantity, "CreateProductCommand.StockQuantity",
                 "Quantity must not be greater than 1000000"));
+
+        if (BuyValue > 0)
+        {
+            AddNotifications(new Contract<decimal>()
+                .AreEquals(SellValue, BuyValue + BuyValue * Percentage, "CreateProductCommand.StockQuantity", 
+                    $"Sell value must be {Percentage}% greater than buy value"));
+        }
     }
 }

@@ -4,7 +4,9 @@ public class Product : Entity, IValidatable
 {
     private IList<Category> _categories;
 
-    protected Product() { }
+    protected Product()
+    {
+    }
 
     public Product(ProductName productName, Price price, Quantity stockQuantity)
     {
@@ -17,7 +19,7 @@ public class Product : Entity, IValidatable
         Validate();
     }
 
-    public Product(ProductName productName, Price price, Quantity stockQuantity, ProductDescription description,
+    public Product(ProductName productName, Price price, Quantity stockQuantity, Description description,
         Manufacturer manufacturer, FileName imageFileName, UrlString imageUrl)
     {
         AddNotifications(productName, price, stockQuantity, description, manufacturer,
@@ -36,13 +38,13 @@ public class Product : Entity, IValidatable
 
     public ProductName ProductName { get; private set; }
 
-    public ProductDescription Description { get; private set; }
-
-    public Manufacturer Manufacturer { get; private set; }
+    public Price Price { get; private set; }
 
     public Quantity StockQuantity { get; private set; }
 
-    public Price Price { get; private set; }
+    public Description Description { get; private set; }
+
+    public Manufacturer Manufacturer { get; private set; }
 
     public FileName ImageFileName { get; private set; }
 
@@ -54,7 +56,7 @@ public class Product : Entity, IValidatable
     {
         AddNotifications(ProductName, Description, Manufacturer, StockQuantity, Price,
             ImageFileName, ImageUrl);
-        
+
         foreach (var category in Categories)
             AddNotifications(category);
     }
@@ -62,98 +64,108 @@ public class Product : Entity, IValidatable
     public void AddCategory(Category category)
     {
         category.Validate();
-        
+
         if (!category.IsValid)
             AddNotifications(category);
 
         else if (_categories.Any(x => x.Id == category.Id))
             AddNotification("Product.Categories", "This category has already been added.");
 
-        else
-            _categories.Add(category);
+        _categories.Add(category);
     }
-    
+
     public void RemoveCategory(Category category)
     {
         category.Validate();
-        
+
         if (!category.IsValid)
             AddNotifications(category);
 
         else if (_categories.All(x => x.Id != category.Id))
             AddNotification("Product.Categories", "Can not find this category.");
 
-        else
-            _categories.Add(category);
+        _categories.Add(category);
     }
 
     public void EditProductName(ProductName name)
     {
         name.Validate();
-        
+
         if (!name.IsValid)
             AddNotifications(name);
 
-        else
-            ProductName = name;
+        ProductName.EditProductNameVOName(name.Name);
+    }
+    
+    public void EditProductSellPrice(decimal price)
+    {
+        Price.EditSellValue(price);
+        
+        Price.Validate();
+
+        if (!Price.IsValid)
+            AddNotifications(Price);
     }
 
-    public void EditProductPrice(Price price)
+    public void EditProductBuyPrice(decimal price, decimal percentage)
     {
-        price.Validate();
+        Price.EditBuyValue(price, percentage);
         
-        if (!price.IsValid)
-            AddNotifications(price);
+        Price.Validate();
 
-        else
-            Price = price;
+        if (!Price.IsValid)
+            AddNotifications(Price);
+    }
+    
+    public void EditProductPricePercentage(decimal price, decimal percentage)
+    {
+        Price.EditPercentage(price, percentage);
+        
+        Price.Validate();
+
+        if (!Price.IsValid)
+            AddNotifications(Price);
     }
 
     public void EditProductStockQuantity(Quantity quantity)
     {
         quantity.Validate();
-        
+
         if (!quantity.IsValid)
             AddNotifications(quantity);
 
-        else
-            StockQuantity = quantity;
+        StockQuantity.EditQuantityValue(quantity.QuantityValue);
     }
 
-    public void EditProductDescription(ProductDescription description)
+    public void EditProductDescription(Description description)
     {
         description.Validate();
-        
+
         if (!description.IsValid)
             AddNotifications(description);
 
-        else
-            Description = description;
+        Description.EditDescriptionVOText(description.DescriptionText);
     }
 
     public void EditProductManufacturer(Manufacturer manufacturer)
     {
         manufacturer.Validate();
-        
+
         if (!manufacturer.IsValid)
             AddNotifications(manufacturer);
 
-        else
-            Manufacturer = manufacturer;
+        Manufacturer.EditManufacturerVOName(manufacturer.Name);
     }
 
-    public void EditProductImage(FileName fileName, UrlString url)
+    public void EditProductImageData(FileName fileName, UrlString url)
     {
         fileName.Validate();
         url.Validate();
-        
+
         if (!fileName.IsValid || !url.IsValid)
             AddNotifications(fileName, url);
 
-        else
-        {
-            ImageFileName = fileName;
-            ImageUrl = url;
-        }
+        ImageFileName.EditFileNameVOName(fileName.Name);
+        ImageUrl.EditUrlStringProperty(url.UrlStringProperty);
     }
 }

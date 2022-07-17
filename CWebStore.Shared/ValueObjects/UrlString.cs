@@ -22,6 +22,12 @@ public class UrlString : ValueObject, IValidatable
             .IsUrl(UrlStringProperty, "UrlString.UrlStringProperty",
                 "This is not a valid Url."));
     }
+
+    public void EditUrlStringProperty(string url)
+    {
+        UrlStringProperty = url;
+        Validate();
+    }
     
     public override string ToString() => UrlStringProperty;
 }

@@ -3,10 +3,7 @@
 public class Category : Entity, IValidatable
 {
     private IList<Product> _products;
-
-    protected Category()
-    {
-    }
+    protected Category() { }
 
     public Category(CategoryName name)
     {
@@ -36,38 +33,6 @@ public class Category : Entity, IValidatable
         if (!name.IsValid)
             AddNotifications(name);
 
-        else
-            CategoryName = name;
-
-    }
-
-    public void AddProduct(Product product)
-    {
-        product.Validate();
-        
-        if (!product.IsValid)
-            AddNotifications(product);
-
-        else if (_products.Any(x => x.Id == product.Id))
-            AddNotification("Category.Products", "This product has already been added.");
-
-        else
-            _products.Add(product);
-
-        Validate();
-    }
-
-    public void RemoveProduct(Product product)
-    {
-        product.Validate();
-        
-        if (!product.IsValid)
-            AddNotifications(product);
-        
-        else if (_products.All(x => x.Id != product.Id))
-            AddNotification("Category.Products", "Can not find this product.");
-
-        else
-            _products.Remove(product);
+        CategoryName.EditCategoryNameVOName(name.Name);
     }
 }

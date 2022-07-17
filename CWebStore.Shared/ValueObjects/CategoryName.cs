@@ -23,5 +23,11 @@ public class CategoryName : ValueObject, IValidatable
                 "Category name must have 80 or less characters."));
     }
 
+    public void EditCategoryNameVOName(string name)
+    {
+        Name = name;
+        Validate();
+    }
+
     public override string ToString() => Name;
 }

@@ -10,7 +10,7 @@
             Validate();
         }
 
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
         public void Validate()
         {
@@ -21,6 +21,12 @@
                     "Product name must have two or more characters.")
                 .IsGreaterThan(120, Name.Length, "ProductName.Name",
                     "Product name must have 120 or less characters."));
+        }
+
+        public void EditProductNameVOName(string name)
+        {
+            Name = name;
+            Validate();
         }
 
         public override string ToString() => Name;

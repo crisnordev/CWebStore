@@ -22,10 +22,14 @@ public class FileName : ValueObject, IValidatable
             .IsLowerThan(6, Name.Length, "FileName.Name",
                 "File name must have two or more characters.")
             .IsGreaterThan(60, Name.Length, "FileName.Name",
-                "File name must have 60 or less characters."));
-            
-        if(!Name.EndsWith(".png") && IsValid)
-            AddNotification("FileName.Name", "File must be a .png file");
+                "File name must have 60 or less characters.")
+            .AreEquals(".png", Name[..^4], "FileName.Name", "File must be a .png file"));
+    }
+
+    public void EditFileNameVOName(string name)
+    {
+        Name = name;
+        Validate();
     }
 
     public override string ToString() => Name;

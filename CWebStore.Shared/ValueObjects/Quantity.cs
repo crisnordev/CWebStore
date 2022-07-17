@@ -16,7 +16,7 @@ public class Quantity : ValueObject, IValidatable
     {
         AddNotifications(new Contract<decimal>()
             .IsLowerThan(0, QuantityValue, "Price.Value", 
-                "Quantity must not be lower or equals 0.")
+                "Quantity must not be lower than 0.")
             .IsGreaterThan(1000000, QuantityValue, "Price.Value", 
                 "Quantity must not be greater than 1000000"));
     }

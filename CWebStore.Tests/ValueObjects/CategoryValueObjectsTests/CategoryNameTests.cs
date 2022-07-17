@@ -9,8 +9,7 @@ public class CategoryNameTests
     {
         var categoryName = new CategoryName(string.Empty);
         var message = "Category name must not be null or empty.";
-        var categoryError = categoryName.Notifications.First();
-        Assert.AreEqual(message, categoryError.Message);
+        Assert.AreEqual(message, categoryName.Notifications.First().Message);
     }
     
     [TestMethod]
@@ -19,8 +18,7 @@ public class CategoryNameTests
     {
         var categoryName = new CategoryName("a");
         var message = "Category name must have two or more characters.";
-        var categoryError = categoryName.Notifications.First();
-        Assert.AreEqual(message, categoryError.Message);
+        Assert.AreEqual(message, categoryName.Notifications.First().Message);
     }
     
     [TestMethod]
@@ -30,8 +28,17 @@ public class CategoryNameTests
         var great = "aaaaaaaa10aaaaaaaa20aaaaaaaa30aaaaaaaa40";
         var categoryName = new CategoryName(great + great + "1");
         var message = "Category name must have 80 or less characters.";
-        var categoryError = categoryName.Notifications.First();
-        Assert.AreEqual(message, categoryError.Message);
+        Assert.AreEqual(message, categoryName.Notifications.First().Message);
+    }
+    
+    [TestMethod]
+    [TestCategory("ProductApi.ValueObjects")]
+    public void Given_a_valid_category_name_EditCategoryNameVOName_invalid_should_return_error_message()
+    {
+        var categoryName = new CategoryName("Valid Category Name");
+        categoryName.EditCategoryNameVOName(string.Empty);
+        var message = "Category name must not be null or empty.";
+        Assert.AreEqual(message, categoryName.Notifications.First().Message);
     }
     
     [TestMethod]
@@ -39,6 +46,15 @@ public class CategoryNameTests
     public void Given_a_valid_category_name_should_return_IsValid()
     {
         var categoryName = new CategoryName("Valid Category Name");
+        Assert.IsTrue(categoryName.IsValid);
+    }
+    
+    [TestMethod]
+    [TestCategory("ProductApi.ValueObjects")]
+    public void Given_a_valid_category_name_EditCategoryNameVOName_valid_should_return_IsValid()
+    {
+        var categoryName = new CategoryName("Valid Category Name");
+        categoryName.EditCategoryNameVOName("Another valid Category Name");
         Assert.IsTrue(categoryName.IsValid);
     }
 }

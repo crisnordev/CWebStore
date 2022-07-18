@@ -6,7 +6,7 @@ public class FileName : ValueObject, IValidatable
 
     public FileName(string name)
     {
-        Name = name.ToLower().Trim();
+        Name = name;
         Validate();
     }
 
@@ -14,8 +14,6 @@ public class FileName : ValueObject, IValidatable
 
     public void Validate()
     {
-        
-        
         AddNotifications(new Contract<string>()
             .IsNotNullOrEmpty(Name, "FileName.Name",
                 "File name must not be null or empty.")

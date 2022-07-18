@@ -10,4 +10,8 @@
     <PackageReference Include="flunt" Version="2.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\Commands" />
+  </ItemGroup>
+
 </Project>

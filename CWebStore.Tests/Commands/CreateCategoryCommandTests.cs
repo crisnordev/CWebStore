@@ -6,7 +6,7 @@ namespace CWebStore.Tests.Commands;
 public class CreateCategoryCommandTests
 {
     [TestMethod]
-    [TestCategory("ProductApi.Entities")]
+    [TestCategory("ProductApi.Commands")]
     public void Given_category_with_invalid_name_should_return_error_message()
     {
         var category = new CreateCategoryCommand(string.Empty);
@@ -15,11 +15,10 @@ public class CreateCategoryCommandTests
     }
     
     [TestMethod]
-    [TestCategory("ProductApi.Entities")]
+    [TestCategory("ProductApi.Commands")]
     public void Given_category_with_valid_name_should_return_IsValid()
     {
         var category = new CreateCategoryCommand("Category name");
-        var message = "Category name must not be null or empty.";
         Assert.IsTrue(category.IsValid);
     }
 }

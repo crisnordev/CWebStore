@@ -5,9 +5,9 @@ public class FileNameTests
 {
     [TestMethod]
     [TestCategory("ProductApi.ValueObjects")]
-    public void Given_a_string_empty_file_name_should_return_IsNotNullOrEmpty_error_message()
+    public void Given_a_string_empty_file_name_should_return_error_message()
     {
-        var fileName = new FileName(string.Empty);
+        var fileName = new FileName("");
         var message = "File name must not be null or empty.";
         Assert.AreEqual(message, fileName.Notifications.First().Message);
     }

@@ -6,7 +6,7 @@ namespace CWebStore.Tests.Commands;
 public class CreateProductCommandTests
 {
     [TestMethod]
-    [TestCategory("ProductApi.Entities")]
+    [TestCategory("ProductApi.Commands")]
     public void Given_product_with_invalid_name_should_return_error_message()
     {
         var product = new CreateProductCommand(string.Empty, "Product description", 
@@ -17,7 +17,7 @@ public class CreateProductCommandTests
     }
     
     [TestMethod]
-    [TestCategory("ProductApi.Entities")]
+    [TestCategory("ProductApi.Commands")]
     public void Given_product_with_buy_value_and_invalid_sell_value_should_return_error_message()
     {
         var product = new CreateProductCommand(string.Empty, "Product description", 
@@ -28,7 +28,7 @@ public class CreateProductCommandTests
     }
     
     [TestMethod]
-    [TestCategory("ProductApi.Entities")]
+    [TestCategory("ProductApi.Commands")]
     public void Given_category_with_valid_name_should_return_IsValid()
     {
         var category = new CreateProductCommand("Product name", "Product description", 
@@ -38,7 +38,7 @@ public class CreateProductCommandTests
     }
     
     [TestMethod]
-    [TestCategory("ProductApi.Entities")]
+    [TestCategory("ProductApi.Commands")]
     public void Given_product_with_buy_value_and_valid_sell_value_should_return_IsValid()
     {
         var product = new CreateProductCommand(string.Empty, "Product description", 

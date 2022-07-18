@@ -6,7 +6,7 @@ public class FileName : ValueObject, IValidatable
 
     public FileName(string name)
     {
-        Name = name;
+        Name = name.ToLower().Trim();
         Validate();
     }
 

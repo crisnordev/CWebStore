@@ -10,6 +10,16 @@
     <PackageReference Include="flunt" Version="2.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="obj\Debug\net6.0\CWebStore.Api.csproj.CopyComplete" />
+    <Content Include="obj\Debug\net6.0\CWebStore.Api.csproj.CoreCompileInputs.cache" />
+    <Content Include="obj\Debug\net6.0\CWebStore.Api.dll" />
+    <Content Include="obj\Debug\net6.0\CWebStore.Api.genruntimeconfig.cache" />
+    <Content Include="obj\Debug\net6.0\CWebStore.Api.MvcApplicationPartsAssemblyInfo.cache" />
+    <Content Include="obj\Debug\net6.0\CWebStore.Api.pdb" />
+    <Content Include="obj\Debug\net6.0\staticwebassets.build.json" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>

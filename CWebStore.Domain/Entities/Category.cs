@@ -1,14 +1,9 @@
-﻿using CWebStore.Shared.ProductValueObjects.ValueObjects;
-
-namespace CWebStore.Domain.Entities;
+﻿namespace CWebStore.Domain.Entities;
 
 public class Category : Entity, IValidatable
 {
     private IList<Product> _products;
-
-    protected Category()
-    {
-    }
+    protected Category() { }
 
     public Category(CategoryName name)
     {
@@ -30,37 +25,14 @@ public class Category : Entity, IValidatable
         foreach (var product in Products)
             AddNotifications(product);
     }
-
-    public void AddProduct(Product product)
+    
+    public void EditCategoryName(CategoryName name)
     {
-        AddNotifications(product);
-        if (!product.IsValid)
-            AddNotification("Category.Products", "It is not possible to add this product.");
+        name.Validate();
 
-        else if (_products.Any(x => x.Id == product.Id))
-            AddNotification("Category.Products", "This product has already been added.");
+        if (!name.IsValid)
+            AddNotifications(name);
 
-        else
-            _products.Add(product);
-
-        Validate();
-    }
-
-    public void EditCategoryName(string categoryName)
-    {
-        CategoryName.EditCategoryName(categoryName);
-
-        Validate();
-    }
-
-    public void RemoveProduct(Product product)
-    {
-        if (!product.IsValid || _products.All(x => x.Id != product.Id))
-            AddNotification("Category.Products", "It is not possible to remove this product.");
-
-        else
-            _products.Remove(product);
-
-        Validate();
+        CategoryName.EditCategoryNameVOName(name.Name);
     }
 }

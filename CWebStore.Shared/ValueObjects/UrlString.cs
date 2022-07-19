@@ -1,4 +1,4 @@
-﻿namespace CWebStore.Shared.ValueObjects;
+namespace CWebStore.Shared.ValueObjects;
 
 public class UrlString : ValueObject, IValidatable
 {
@@ -21,6 +21,12 @@ public class UrlString : ValueObject, IValidatable
                 "This is not a valid Url.")
             .IsUrl(UrlStringProperty, "UrlString.UrlStringProperty",
                 "This is not a valid Url."));
+    }
+
+    public void EditUrlStringProperty(string url)
+    {
+        UrlStringProperty = url;
+        Validate();
     }
     
     public override string ToString() => UrlStringProperty;

@@ -1,11 +1,8 @@
-﻿using CWebStore.Shared.Interfaces;
-using Flunt.Validations;
-
-namespace CWebStore.Shared.ValueObjects;
+﻿namespace CWebStore.Shared.ValueObjects;
 
 public class FileName : ValueObject, IValidatable
 {
-    protected FileName() { }
+    protected FileName() {}
 
     public FileName(string name)
     {
@@ -17,8 +14,6 @@ public class FileName : ValueObject, IValidatable
 
     public void Validate()
     {
-        
-        
         AddNotifications(new Contract<string>()
             .IsNotNullOrEmpty(Name, "FileName.Name",
                 "File name must not be null or empty.")
@@ -26,9 +21,15 @@ public class FileName : ValueObject, IValidatable
                 "File name must have two or more characters.")
             .IsGreaterThan(60, Name.Length, "FileName.Name",
                 "File name must have 60 or less characters."));
-            
+        
         if(!Name.EndsWith(".png") && IsValid)
             AddNotification("FileName.Name", "File must be a .png file");
+    }
+
+    public void EditFileNameVOName(string name)
+    {
+        Name = name;
+        Validate();
     }
 
     public override string ToString() => Name;

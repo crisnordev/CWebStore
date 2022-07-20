@@ -11,60 +11,71 @@ public class Price : ValueObject, IValidatable
         Validate();
     }
 
+    public Price(decimal buyValue, decimal percentage)
+    {
+        BuyValue = buyValue;
+        Percentage = percentage;
+        
+        Validate();
+        if (IsValid && Percentage > 0)
+            SellValue = BuyValue + BuyValue * Percentage / 100;
+
+        else
+            SellValue = BuyValue;
+    }
+    
     public decimal SellValue { get; private set; }
 
-    public decimal BuyValue { get; private set; } 
+    public decimal BuyValue { get; private set; }
 
     public decimal Percentage { get; private set; }
 
     public void Validate()
     {
         AddNotifications(new Contract<decimal>()
-            .IsLowerOrEqualsThan(0.00m, SellValue, "Price.SellValue", 
-                "Sell value must not be lower or equals 0.")
-            .IsGreaterThan(200000.00m, SellValue, "Price.SellValue", 
-                "Sell value must not be greater than 200000.")
-            .IsLowerThan(0.00m, BuyValue, "Price.BuyValue",
+            .IsGreaterOrEqualsThan(SellValue,0,  "Price.SellValue", 
+                "Sell value must not be lower than 0.")
+            .IsGreaterOrEqualsThan(BuyValue, 0, "Price.BuyValue",
                 "Buy value must not be lower than 0.")
-            .IsGreaterThan(100000.00m, BuyValue, "Price.BuyValue",
-                "Buy value must not be greater than 100000.")
-            .IsLowerThan(0.00m, Percentage, "Price.Percentage",
-                "Percentage must not be lower than 0.")
-            .IsGreaterThan(100.00m, Percentage, "Price.Percentage",
-                "Percentage must not be greater than 100."));
-        
-        if (BuyValue > 0 || Percentage > 0)
-            AddNotifications(new Contract<decimal>()
-                .IsLowerOrEqualsThan(0.00m, Percentage, "Price.EditBuyValue",
-                    "Percentage must have a value greater than 0.")
-                .IsLowerOrEqualsThan(0.00m, BuyValue, "Price.EditPercentage",
-                    "Buy price must have a value greater than 0."));
+            .IsGreaterOrEqualsThan(Percentage, 0, "Price.Percentage",
+                "Percentage must not be lower than 0."));
     }
 
     public void EditSellValue(decimal sellValue)
     {
         SellValue = sellValue;
-        BuyValue = 0;
-        Percentage = 0;
-        
         Validate();
+        
+        if (IsValid && SellValue > BuyValue && BuyValue > 0)
+            Percentage = (SellValue - BuyValue) * 100 / BuyValue;
+        
+        else
+        {
+            Percentage = 0;
+            BuyValue = 0;
+        }
     }
 
-    public void EditBuyValue(decimal buyValue, decimal percentage)
+    public void EditBuyValue(decimal buyValue)
     {
         BuyValue = buyValue;
-        Percentage = percentage;
-        SellValue = BuyValue + BuyValue * (Percentage / 100);
-        
         Validate();
+
+        if (IsValid && Percentage > 0)
+            SellValue = BuyValue + BuyValue * Percentage / 100;
     }
 
-    public void EditPercentage(decimal buyValue, decimal percentage)
+    public void EditPercentage(decimal percentage)
     {
-        BuyValue = buyValue;
         Percentage = percentage;
-        SellValue = BuyValue + BuyValue * (Percentage / 100);
-        
         Validate();
+        
+        if (IsValid && BuyValue > 0 && Percentage > 0)
+            SellValue = BuyValue + BuyValue * Percentage / 100;
+
+        else
+        {
+            SellValue = 0;
+        }
     }
 }

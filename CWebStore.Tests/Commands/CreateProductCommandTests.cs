@@ -18,13 +18,13 @@ public class CreateProductCommandTests
     
     [TestMethod]
     [TestCategory("CWebStore.Domain.Commands")]
-    public void Given_CreateProductCommand_with_buy_value_and_invalid_sell_value_should_return_error_message()
+    public void Given_CreateProductCommand_with_buy_value_and_percentage_sell_value_should_return_sell_value_correctly_calculated()
     {
-        var product = new CreateProductCommand(string.Empty, "Product description", 
-            "Manufacturer name", 1, 1, 10, 
+        var product = new CreateProductCommand("Valid product name", "Product description", 
+            "Manufacturer name", 10, 20, 10, 
             "imagefile.png", "https://docs.microsoft.com" );
-        var message = $"Sell value must be {product.Percentage}% greater than buy value";
-        Assert.AreEqual(message, product.Notifications.First().Message);
+        
+        Assert.AreEqual(12, product.SellValue);
     }
     
     [TestMethod]
@@ -39,10 +39,10 @@ public class CreateProductCommandTests
     
     [TestMethod]
     [TestCategory("CWebStore.Domain.Commands")]
-    public void Given_CreateProductCommand_with_buy_value_and_valid_sell_value_should_return_IsValid()
+    public void Given_CreateProductCommand_with_buy_value_and_percentage_should_return_IsValid()
     {
-        var product = new CreateProductCommand(string.Empty, "Product description", 
-            "Manufacturer name", 1.1m, 1, 10, 10, 
+        var product = new CreateProductCommand("Valid product name", "Product description", 
+            "Manufacturer name", 1, 10, 10, 
             "imagefile.png", "https://docs.microsoft.com" );
         Assert.IsTrue(product.IsValid);
     }

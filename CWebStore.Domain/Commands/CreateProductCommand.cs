@@ -16,32 +16,20 @@ public class CreateProductCommand : Notifiable<Notification>, ICommand
         Validate();
     }
 
+
     public CreateProductCommand(string productName, string productDescription, string manufacturerName, decimal buyValue, decimal percentage, int stockQuantity, string imageFileName, string imageUrl)
     {
         ProductName = productName;
         ProductDescription = productDescription;
         ManufacturerName = manufacturerName;
-        SellValue = buyValue + buyValue * percentage;
         BuyValue = buyValue;
         Percentage = percentage;
         StockQuantity = stockQuantity;
         ImageFileName = imageFileName;
         ImageUrl = imageUrl;
         Validate();
-    }
-
-    public CreateProductCommand(string productName, string productDescription, string manufacturerName, decimal sellValue, decimal buyValue, decimal percentage, int stockQuantity, string imageFileName, string imageUrl)
-    {
-        ProductName = productName;
-        ProductDescription = productDescription;
-        ManufacturerName = manufacturerName;
-        SellValue = sellValue;
-        BuyValue = buyValue;
-        Percentage = percentage;
-        StockQuantity = stockQuantity;
-        ImageFileName = imageFileName;
-        ImageUrl = imageUrl;
-        Validate();
+        if (BuyValue > 0)
+            SellValue = BuyValue + BuyValue * Percentage / 100;
     }
 
     public string ProductName { get; set; }
@@ -98,13 +86,13 @@ public class CreateProductCommand : Notifiable<Notification>, ICommand
         
         AddNotifications(new Contract<decimal>()
             .IsGreaterThan(SellValue, 0m, "CreateProductCommand.SellValue",
-                "This value must not be lower or equals 0.")
+                "Sell value must not be lower or equals 0.")
             .IsLowerThan(SellValue, 200000m, "CreateProductCommand.SellValue",
-                "This value must not be greater than 200000.")
+                "Sell value must not be greater than 200000.")
             .IsGreaterOrEqualsThan(BuyValue, 0m, "CreateProductCommand.BuyValue",
-                "This value must not be lower than 0.")
+                "Buy value must not be lower than 0.")
             .IsLowerThan(BuyValue, 100000m, "CreateProductCommand.BuyValue",
-                "This value must not be greater than 100000.")
+                "Buy value must not be greater than 100000.")
             .IsGreaterOrEqualsThan(Percentage, 0m, "CreateProductCommand.Percentage",
                 "Percentage must not be lower than 0.")
             .IsLowerThan(Percentage, 100m, "CreateProductCommand.Percentage",
@@ -113,12 +101,5 @@ public class CreateProductCommand : Notifiable<Notification>, ICommand
                 "Quantity must not be lower or equals 0.")
             .IsGreaterThan(1000000, StockQuantity, "CreateProductCommand.StockQuantity",
                 "Quantity must not be greater than 1000000"));
-
-        if (BuyValue > 0)
-        {
-            AddNotifications(new Contract<decimal>()
-                .AreEquals(SellValue, BuyValue + BuyValue * Percentage, "CreateProductCommand.StockQuantity", 
-                    $"Sell value must be {Percentage}% greater than buy value"));
-        }
     }
 }

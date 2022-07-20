@@ -97,36 +97,17 @@ public class Product : Entity, IValidatable
         ProductName.EditProductNameVOName(name.Name);
     }
     
-    public void EditProductSellPrice(decimal price)
+    public void EditProductPrice(Price price)
     {
-        Price.EditSellValue(price);
+        if (!price.IsValid)
+            AddNotifications(price);
         
-        Price.Validate();
-
-        if (!Price.IsValid)
-            AddNotifications(Price);
-    }
-
-    public void EditProductBuyPrice(decimal price, decimal percentage)
-    {
-        Price.EditBuyValue(price, percentage);
-        
-        Price.Validate();
-
-        if (!Price.IsValid)
-            AddNotifications(Price);
+        Price.EditSellValue(price.SellValue);
+        Price.EditBuyValue(price.BuyValue);
+        Price.EditPercentage(price.Percentage);
     }
     
-    public void EditProductPricePercentage(decimal buyPrice, decimal percentage)
-    {
-        Price.EditPercentage(buyPrice, percentage);
-        
-        Price.Validate();
-
-        if (!Price.IsValid)
-            AddNotifications(Price);
-    }
-
+    
     public void EditProductStockQuantity(Quantity quantity)
     {
         quantity.Validate();

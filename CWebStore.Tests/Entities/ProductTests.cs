@@ -44,34 +44,37 @@ public class ProductTests
     [TestCategory("CWebStore.Domain.Entities")]
     public void Given_valid_product_EditProductSellPrice_with_invalid_price_should_return_error_message()
     {
-        var product = new Product(new ProductName("Product name"), new Price(1), new Quantity(1), 
-            new Description("Product description"), new Manufacturer("Manufacturer"), 
+        var product = new Product(new ProductName("Product name"), new Price(1), new Quantity(1),
+            new Description("Product description"), new Manufacturer("Manufacturer"),
             new FileName("fileName.png"), new UrlString("https://balta.io/"));
-        product.EditProductSellPrice(-1);
-        var message = "This value must not be lower or equals 0.";
+        product.Price.EditSellValue(-1);
+        product.EditProductPrice(product.Price);
+        var message = "Sell value must not be lower than 0.";
         Assert.AreEqual(message, product.Notifications.FirstOrDefault().Message);
     }
     
     [TestMethod]
-    [TestCategory("CWebStore.Domain.ValueObjects")]
-    public void Given_a_price_EditProductBuyPrice_with_invalid_value_should_return_error_message()
+    [TestCategory("CWebStore.Domain.Entities")]
+    public void Given_valid_product_EditProductBuyPrice_with_invalid_price_should_return_error_message()
     {
-        var product = new Product(new ProductName("Product name"), new Price(1), new Quantity(1), 
-            new Description("Product description"), new Manufacturer("Manufacturer"), 
+        var product = new Product(new ProductName("Product name"), new Price(1), new Quantity(1),
+            new Description("Product description"), new Manufacturer("Manufacturer"),
             new FileName("fileName.png"), new UrlString("https://balta.io/"));
-        product.EditProductBuyPrice(-1, 10);
+        product.Price.EditBuyValue(-1);
+        product.EditProductPrice(product.Price);
         var message = "Buy value must not be lower than 0.";
-        Assert.AreEqual(message, product.Notifications.First().Message);
+        Assert.AreEqual(message, product.Notifications.FirstOrDefault().Message);
     }
     
     [TestMethod]
     [TestCategory("CWebStore.Domain.ValueObjects")]
     public void Given_a_product_EditProductPercentage_with_invalid_value_should_return_error_message()
     {
-        var product = new Product(new ProductName("Product name"), new Price(1), new Quantity(1), 
-            new Description("Product description"), new Manufacturer("Manufacturer"), 
+        var product = new Product(new ProductName("Product name"), new Price(1), new Quantity(1),
+            new Description("Product description"), new Manufacturer("Manufacturer"),
             new FileName("fileName.png"), new UrlString("https://balta.io/"));
-        product.EditProductPricePercentage(1, -1);
+        product.Price.EditPercentage(-1);
+        product.EditProductPrice(product.Price);
         var message = "Percentage must not be lower than 0.";
         Assert.AreEqual(message, product.Notifications.First().Message);
     }
@@ -84,7 +87,7 @@ public class ProductTests
             new Description("Product description"), new Manufacturer("Manufacturer"), 
             new FileName("fileName.png"), new UrlString("https://balta.io/"));
         product.EditProductStockQuantity(new Quantity(-1));
-        var message = "Quantity must not be lower or equals 0.";
+        var message = "Quantity must not be lower than 0.";
         Assert.AreEqual(message, product.Notifications.FirstOrDefault().Message);
     }
     
@@ -160,21 +163,23 @@ public class ProductTests
     [TestCategory("CWebStore.Domain.Entities")]
     public void Given_valid_product_EditProductSellPrice_with_valid_price_should_return_IsValid()
     {
-        var product = new Product(new ProductName("Product name"), new Price(1), new Quantity(1), 
-            new Description("Product description"), new Manufacturer("Manufacturer"), 
+        var product = new Product(new ProductName("Product name"), new Price(1), new Quantity(1),
+            new Description("Product description"), new Manufacturer("Manufacturer"),
             new FileName("fileName.png"), new UrlString("https://balta.io/"));
-        product.EditProductSellPrice(2);
+        product.Price.EditSellValue(2);
+        product.EditProductPrice(product.Price);
         Assert.IsTrue(product.IsValid);
     }
-    
+
     [TestMethod]
-    [TestCategory("CWebStore.Domain.ValueObjects")]
-    public void Given_a_product_EditProductBuyPrice_with_valid_value_should_return_IsValid()
+    [TestCategory("CWebStore.Domain.Entities")]
+    public void Given_valid_product_EditProductBuyPrice_with_valid_price_should_return_IsValid()
     {
-        var product = new Product(new ProductName("Product name"), new Price(1), new Quantity(1), 
-            new Description("Product description"), new Manufacturer("Manufacturer"), 
+        var product = new Product(new ProductName("Product name"), new Price(1, 20), new Quantity(1),
+            new Description("Product description"), new Manufacturer("Manufacturer"),
             new FileName("fileName.png"), new UrlString("https://balta.io/"));
-        product.EditProductBuyPrice(1, 10);
+        product.Price.EditBuyValue(2);
+        product.EditProductPrice(product.Price);
         Assert.IsTrue(product.IsValid);
     }
     
@@ -182,10 +187,11 @@ public class ProductTests
     [TestCategory("CWebStore.Domain.ValueObjects")]
     public void Given_a_product_EditProductPercentage_with_valid_value_should_return_IsValid()
     {
-        var product = new Product(new ProductName("Product name"), new Price(1), new Quantity(1), 
+        var product = new Product(new ProductName("Product name"), new Price(1, 10), new Quantity(1), 
             new Description("Product description"), new Manufacturer("Manufacturer"), 
             new FileName("fileName.png"), new UrlString("https://balta.io/"));
-        product.EditProductPricePercentage(1, 10);
+        product.Price.EditPercentage(20);
+        product.EditProductPrice(product.Price);
         Assert.IsTrue(product.IsValid);
     }
     

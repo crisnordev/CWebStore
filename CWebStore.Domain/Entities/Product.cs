@@ -4,14 +4,10 @@ public class Product : Entity, IValidatable
 {
     private IList<Category> _categories;
 
-    protected Product()
-    {
-    }
+    protected Product() { }
 
     public Product(ProductName productName, Price price, Quantity stockQuantity)
     {
-        AddNotifications(productName, price, stockQuantity);
-
         ProductName = productName;
         Price = price;
         StockQuantity = stockQuantity;
@@ -22,9 +18,6 @@ public class Product : Entity, IValidatable
     public Product(ProductName productName, Price price, Quantity stockQuantity, Description description,
         Manufacturer manufacturer, FileName imageFileName, UrlString imageUrl)
     {
-        AddNotifications(productName, price, stockQuantity, description, manufacturer,
-            imageFileName, imageUrl);
-
         ProductName = productName;
         Price = price;
         StockQuantity = stockQuantity;

@@ -7,8 +7,6 @@ public class Category : Entity, IValidatable
 
     public Category(CategoryName name)
     {
-        AddNotifications(name);
-
         CategoryName = name;
         _products = new List<Product>();
         Validate();

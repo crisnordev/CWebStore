@@ -2,9 +2,7 @@
 
 public interface ICategoryRepository
 {
-    void CategoryExists(string categoryName);
-    
-    void GetCategory(Guid id);
+    bool CategoryExists(string categoryName);
 
     void PostCategory(Category category);
 

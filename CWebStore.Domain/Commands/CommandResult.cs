@@ -16,26 +16,12 @@ public class CommandResult : Notifiable<Notification>, ICommandResult
         Message = message;
         Data = data;
     }
-
-    public CommandResult(bool success, string message, Dictionary<string, string> errors)
+    
+    public CommandResult(bool success, string message, List<Notification> notifications)
     {
         Success = success;
         Message = message;
-        Errors = errors;
-    }
-
-    public CommandResult(bool success, string message, object data, List<Notification> notifications)
-    {
-        Success = success;
-        Message = message;
-        Data = data;
-        Errors = new Dictionary<string, string>();
-        foreach (var notification in notifications)
-        {
-            Errors.Keys.Append(notification.Key);
-            Errors.Values.Append(notification.Message);
-        }
-        
+        Errors.AddRange(notifications);
     }
 
     public bool Success { get; set; }
@@ -44,5 +30,5 @@ public class CommandResult : Notifiable<Notification>, ICommandResult
 
     public object Data { get; set; }
 
-    public Dictionary<string, string> Errors { get; set; }
+    public List<Notification> Errors { get; set; } = new();
 }

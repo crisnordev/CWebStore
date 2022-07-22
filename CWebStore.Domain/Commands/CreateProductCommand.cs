@@ -85,21 +85,13 @@ public class CreateProductCommand : Notifiable<Notification>, ICommand
                 "This is not a valid Url."));
         
         AddNotifications(new Contract<decimal>()
-            .IsGreaterThan(SellValue, 0m, "CreateProductCommand.SellValue",
+            .IsGreaterOrEqualsThan(SellValue, 0m, "CreateProductCommand.SellValue",
                 "Sell value must not be lower or equals 0.")
-            .IsLowerThan(SellValue, 200000m, "CreateProductCommand.SellValue",
-                "Sell value must not be greater than 200000.")
             .IsGreaterOrEqualsThan(BuyValue, 0m, "CreateProductCommand.BuyValue",
                 "Buy value must not be lower than 0.")
-            .IsLowerThan(BuyValue, 100000m, "CreateProductCommand.BuyValue",
-                "Buy value must not be greater than 100000.")
             .IsGreaterOrEqualsThan(Percentage, 0m, "CreateProductCommand.Percentage",
                 "Percentage must not be lower than 0.")
-            .IsLowerThan(Percentage, 100m, "CreateProductCommand.Percentage",
-                "Percentage must not be greater than 100.")
-            .IsLowerThan(0, StockQuantity, "CreateProductCommand.StockQuantity",
-                "Quantity must not be lower or equals 0.")
-            .IsGreaterThan(1000000, StockQuantity, "CreateProductCommand.StockQuantity",
-                "Quantity must not be greater than 1000000"));
+            .IsGreaterOrEqualsThan(StockQuantity, 0, "CreateProductCommand.StockQuantity",
+                "Quantity must not be lower or equals 0."));
     }
 }

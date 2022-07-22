@@ -14,12 +14,12 @@ public class CreateCategoryCommand : Notifiable<Notification>, ICommand
 
     public void Validate()
     {
-        AddNotifications(new Contract<Notification>()
-            .IsNotNullOrEmpty(Name, "CategoryName.Name",
+        AddNotifications(new Contract<string>()
+            .IsNotNullOrEmpty(Name, "CreateCategoryCommand.Name",
                 "Category name must not be null or empty.")
-            .IsLowerThan(2, Name.Length, "CategoryName.Name",
+            .IsLowerThan(2, Name.Length, "CreateCategoryCommand.Name",
                 "Category name must have two or more characters.")
-            .IsGreaterOrEqualsThan(80, Name.Length, "CategoryName.Name",
+            .IsGreaterOrEqualsThan(80, Name.Length, "CreateCategoryCommand.Name",
                 "Category name must have 80 or less characters."));
     }
 }

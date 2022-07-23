@@ -52,7 +52,7 @@ public class CreateProductCommand : Notifiable<Notification>, ICommand
 
     public void Validate()
     {
-        AddNotifications(new Contract<string>()
+        AddNotifications(new Contract<CreateProductCommand>()
             .IsNotNullOrEmpty(ProductName, "CreateProductCommand.ProductName",
                 "Product name must not be null or empty.")
             .IsLowerThan(2, ProductName.Length, "CreateProductCommand.ProductName",
@@ -82,9 +82,7 @@ public class CreateProductCommand : Notifiable<Notification>, ICommand
             .IsUrlOrEmpty(ImageUrl, "CreateProductCommand.ImageUrl",
                 "This is not a valid Url.")
             .IsUrl(ImageUrl, "CreateProductCommand.ImageUrl",
-                "This is not a valid Url."));
-        
-        AddNotifications(new Contract<decimal>()
+                "This is not a valid Url.")
             .IsGreaterOrEqualsThan(SellValue, 0m, "CreateProductCommand.SellValue",
                 "Sell value must not be lower or equals 0.")
             .IsGreaterOrEqualsThan(BuyValue, 0m, "CreateProductCommand.BuyValue",

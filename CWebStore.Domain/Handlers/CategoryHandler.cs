@@ -13,7 +13,6 @@ public class CategoryHandler : Notifiable<Notification>, IHandler<CreateCategory
         command.Validate();
         if (!command.IsValid)
         {
-            AddNotifications(command);
             return new CommandResult(false, "This is not a valid Category.", 
                 new List<Notification>(command.Notifications));
         }

@@ -23,7 +23,7 @@
                     "Manufacturer name must have 120 or less characters."));
         }
 
-        public void EditManufacturerVOName(string name)
+        public void EditManufacturerName(string name)
         {
             Name = name;
             Validate();

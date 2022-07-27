@@ -23,7 +23,7 @@
                     "Product name must have 120 or less characters."));
         }
 
-        public void EditProductNameVOName(string name)
+        public void EditProductName(string name)
         {
             Name = name;
             Validate();

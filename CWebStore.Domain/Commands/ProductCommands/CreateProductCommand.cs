@@ -1,4 +1,4 @@
-﻿namespace CWebStore.Domain.Commands;
+﻿namespace CWebStore.Domain.Commands.ProductCommands;
 
 public class CreateProductCommand : Notifiable<Notification>, ICommand
 {

@@ -1,4 +1,6 @@
-﻿namespace CWebStore.Domain.Handlers;
+﻿using CWebStore.Domain.Commands.ProductCommands;
+
+namespace CWebStore.Domain.Handlers.ProductHandlers;
 
 public class ProductHandler : Notifiable<Notification>, IHandler<CreateProductCommand>
 {

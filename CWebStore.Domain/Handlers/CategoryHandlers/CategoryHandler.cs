@@ -1,4 +1,6 @@
-﻿namespace CWebStore.Domain.Handlers;
+﻿using CWebStore.Domain.Commands.CategoryCommands;
+
+namespace CWebStore.Domain.Handlers.CategoryHandlers;
 
 public class CategoryHandler : Notifiable<Notification>, IHandler<CreateCategoryCommand>
 {

@@ -63,6 +63,9 @@ public class Price : ValueObject, IValidatable
 
         if (IsValid && Percentage > 0)
             SellValue = BuyValue + BuyValue * Percentage / 100;
+
+        else
+            SellValue = 0;
     }
 
     public void EditPercentage(decimal percentage)
@@ -74,8 +77,6 @@ public class Price : ValueObject, IValidatable
             SellValue = BuyValue + BuyValue * Percentage / 100;
 
         else
-        {
             SellValue = 0;
-        }
     }
 }

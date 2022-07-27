@@ -26,7 +26,7 @@ public class FileName : ValueObject, IValidatable
             AddNotification("FileName.Name", "File must be a .png file");
     }
 
-    public void EditFileNameVOName(string name)
+    public void EditFileName(string name)
     {
         Name = name;
         Validate();

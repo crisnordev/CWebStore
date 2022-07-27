@@ -24,13 +24,11 @@ public class Category : Entity, IValidatable
             AddNotifications(product);
     }
     
-    public void EditCategoryName(CategoryName name)
+    public void EditCategoryName(string name)
     {
-        name.Validate();
-
-        if (!name.IsValid)
-            AddNotifications(name);
-
-        CategoryName.EditCategoryNameVOName(name.Name);
+        CategoryName.EditCategoryName(name);
+        
+        if (!CategoryName.IsValid)
+            AddNotifications(CategoryName);
     }
 }

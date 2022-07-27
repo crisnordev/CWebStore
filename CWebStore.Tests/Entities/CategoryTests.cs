@@ -14,10 +14,10 @@ public class CategoryTests
 
     [TestMethod]
     [TestCategory("CWebStore.Domain.Entities")]
-    public void Given_a_valid_category_EditCategoryName_with_string_empty_should_return_IsNotNullOrEmpty_error_message()
+    public void Given_a_valid_category_EditCategoryName_with_string_empty_should_return_error_message()
     {
         var category = new Category(new CategoryName("Category name"));
-        category.EditCategoryName(new CategoryName(string.Empty));
+        category.EditCategoryName(string.Empty);
         var message = "Category name must not be null or empty.";
         Assert.AreEqual(message, category.Notifications.First().Message);
     }
@@ -35,7 +35,7 @@ public class CategoryTests
     public void Given_a_valid_category_EditCategoryName_with_valid_name_should_return_IsValid()
     {
         var category = new Category(new CategoryName("Category name"));
-        category.EditCategoryName(new CategoryName("New category Name"));
+        category.CategoryName.EditCategoryName("New category Name");
         Assert.IsTrue(category.IsValid);
     }
 }

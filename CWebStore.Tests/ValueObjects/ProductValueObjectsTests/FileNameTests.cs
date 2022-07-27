@@ -42,10 +42,10 @@ public class FileNameTests
     
     [TestMethod]
     [TestCategory("CWebStore.Shared.ValueObjects")]
-    public void Given_a_file_name_EditFileNameVOName_invalid_should_return_error_message()
+    public void Given_a_file_name_EditFileName_invalid_should_return_error_message()
     {
         var fileName = new FileName("validFileName.png");
-        fileName.EditFileNameVOName(string.Empty);
+        fileName.EditFileName(string.Empty);
         var message = "File name must not be null or empty.";
         Assert.AreEqual(message, fileName.Notifications.First().Message);
     }
@@ -60,10 +60,10 @@ public class FileNameTests
     
     [TestMethod]
     [TestCategory("CWebStore.Shared.ValueObjects")]
-    public void Given_a_file_name_EditFileNameVOName_valid_should_return_IsValid()
+    public void Given_a_file_name_EditFileName_valid_should_return_IsValid()
     {
         var fileName = new FileName("validFileFormat.png");
-        fileName.EditFileNameVOName("anotherValidFileFormat.png");
+        fileName.EditFileName("anotherValidFileFormat.png");
         Assert.IsTrue(fileName.IsValid);
     }
 }

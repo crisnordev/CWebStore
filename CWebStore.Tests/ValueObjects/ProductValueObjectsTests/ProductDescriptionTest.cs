@@ -33,10 +33,10 @@ public class ProductDescriptionTest
     
     [TestMethod]
     [TestCategory("CWebStore.Shared.ValueObjects")]
-    public void Given_a_valid_product_description_EditDescriptionVOText_invalid_should_return_error_message()
+    public void Given_a_valid_product_description_EditDescriptionText_invalid_should_return_error_message()
     {
         var productDescription = new Description("This is a valid product description");
-        productDescription.EditDescriptionVOText(string.Empty);
+        productDescription.EditDescriptionText(string.Empty);
         var message = "Product description must not be null or empty.";
         Assert.AreEqual(message, productDescription.Notifications.First().Message);
     }
@@ -51,10 +51,10 @@ public class ProductDescriptionTest
     
     [TestMethod]
     [TestCategory("CWebStore.Shared.ValueObjects")]
-    public void Given_a_valid_product_description_EditDescriptionVOText_should_return_IsValid()
+    public void Given_a_valid_product_description_EditDescriptionText_should_return_IsValid()
     {
         var productDescription = new Description("This is a valid product description");
-        productDescription.EditDescriptionVOText("This is another valid product description");
+        productDescription.EditDescriptionText("This is another valid product description");
         Assert.IsTrue(productDescription.IsValid);
     }
 }

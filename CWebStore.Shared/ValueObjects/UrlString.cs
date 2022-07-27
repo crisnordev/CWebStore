@@ -23,7 +23,7 @@ public class UrlString : ValueObject, IValidatable
                 "This is not a valid Url."));
     }
 
-    public void EditUrlStringProperty(string url)
+    public void EditUrlPropertyString(string url)
     {
         UrlStringProperty = url;
         Validate();

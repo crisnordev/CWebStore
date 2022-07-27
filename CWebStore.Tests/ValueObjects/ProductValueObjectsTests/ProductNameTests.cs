@@ -33,9 +33,10 @@ public class ProductNameTests
     
     [TestMethod]
     [TestCategory("CWebStore.Shared.ValueObjects")]
-    public void Given_a_product_name_EditProductNameVOName_invalid_should_return_error_message()
+    public void Given_a_product_name_EditProductName_invalid_should_return_error_message()
     {
-        var productName = new ProductName(string.Empty);
+        var productName = new ProductName("Valid product name");
+        productName.EditProductName(string.Empty);
         var message = "Product name must not be null or empty.";
         Assert.AreEqual(message, productName.Notifications.First().Message);
     }
@@ -50,10 +51,10 @@ public class ProductNameTests
     
     [TestMethod]
     [TestCategory("CWebStore.Shared.ValueObjects")]
-    public void Given_a_valid_product_name_EditProductNameVOName_valid_should_return_IsValid()
+    public void Given_a_valid_product_name_EditProductName_valid_should_return_IsValid()
     {
         var productName = new ProductName("Valid product name");
-        productName.EditProductNameVOName("Another valid Name");
+        productName.EditProductName("Another valid Name");
         Assert.IsTrue(productName.IsValid);
     }
 }

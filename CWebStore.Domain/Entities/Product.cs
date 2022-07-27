@@ -59,87 +59,97 @@ public class Product : Entity, IValidatable
         category.Validate();
 
         if (!category.IsValid)
-            AddNotifications(category);
+            AddNotification("Product.AddCategory", "Can not add this category.");
 
-        else if (_categories.Any(x => x.Id == category.Id))
+        if (_categories.Any(x => x.Id == category.Id))
             AddNotification("Product.Categories", "This category has already been added.");
 
         _categories.Add(category);
     }
 
-    public void RemoveCategory(Category category)
+    public void RemoveCategory(Guid id)
     {
-        category.Validate();
-
-        if (!category.IsValid)
-            AddNotifications(category);
-
-        else if (_categories.All(x => x.Id != category.Id))
+        if (id == null || id == Guid.Empty)
+            AddNotification("Product.Categories", "This id can not be null or empty.");
+        
+        else if (_categories.All(x => x.Id != id))
             AddNotification("Product.Categories", "Can not find this category.");
 
-        _categories.Add(category);
+        else
+            _categories.Remove(_categories.First(x => x.Id == id));
     }
 
-    public void EditProductName(ProductName name)
+    public void EditProductName(string name)
     {
-        name.Validate();
-
-        if (!name.IsValid)
-            AddNotifications(name);
-
-        ProductName.EditProductNameVOName(name.Name);
-    }
-    
-    public void EditProductPrice(Price price)
-    {
-        if (!price.IsValid)
-            AddNotifications(price);
+        ProductName.EditProductName(name);
         
-        Price.EditSellValue(price.SellValue);
-        Price.EditBuyValue(price.BuyValue);
-        Price.EditPercentage(price.Percentage);
+        if (!ProductName.IsValid)
+            AddNotifications(ProductName);
+    }
+    
+    public void EditProductSellValue(decimal sellValue)
+    {
+        Price.EditSellValue(sellValue);
+        
+        if (!Price.IsValid)
+            AddNotifications(Price);
+    }
+    
+    public void EditProductBuyValue(decimal buyValue)
+    {
+        Price.EditBuyValue(buyValue);
+        
+        if (!Price.IsValid)
+            AddNotifications(Price);
+    }
+    
+    public void EditProductPercentage(decimal percentage)
+    {
+        Price.EditPercentage(percentage);
+        
+        if (!Price.IsValid)
+            AddNotifications(Price);
     }
     
     
-    public void EditProductStockQuantity(Quantity quantity)
+    public void EditProductStockQuantity(int quantity)
     {
-        quantity.Validate();
-
-        if (!quantity.IsValid)
-            AddNotifications(quantity);
-
-        StockQuantity.EditQuantityValue(quantity.QuantityValue);
+        StockQuantity.EditQuantityValue(quantity);
+        
+        if (!StockQuantity.IsValid)
+            AddNotifications(StockQuantity);
     }
 
-    public void EditProductDescription(Description description)
+    public void EditProductDescription(string description)
     {
-        description.Validate();
+        Description.EditDescriptionText(description);
+        
+        if (!Description.IsValid)
+            AddNotifications(Description);
 
-        if (!description.IsValid)
-            AddNotifications(description);
-
-        Description.EditDescriptionVOText(description.DescriptionText);
     }
 
-    public void EditProductManufacturer(Manufacturer manufacturer)
+    public void EditProductManufacturer(string manufacturer)
     {
-        manufacturer.Validate();
-
-        if (!manufacturer.IsValid)
-            AddNotifications(manufacturer);
-
-        Manufacturer.EditManufacturerVOName(manufacturer.Name);
+        Manufacturer.EditManufacturerName(manufacturer);
+        
+        if (!Manufacturer.IsValid)
+            AddNotifications(Manufacturer);
     }
 
-    public void EditProductImageData(FileName fileName, UrlString url)
+    public void EditProductFileName(string fileName)
     {
-        fileName.Validate();
-        url.Validate();
+        ImageFileName.EditFileName(fileName);
+        
+        if (!ImageFileName.IsValid)
+            AddNotifications(ImageFileName);
+    }
 
-        if (!fileName.IsValid || !url.IsValid)
-            AddNotifications(fileName, url);
-
-        ImageFileName.EditFileNameVOName(fileName.Name);
-        ImageUrl.EditUrlStringProperty(url.UrlStringProperty);
+    public void EditProductUrl(string url)
+    {
+        ImageUrl.EditUrlPropertyString(url);
+        
+        if (!ImageUrl.IsValid)
+            AddNotifications(ImageUrl);
     }
 }

@@ -23,7 +23,7 @@
                     "Product description must have 160 or less characters."));
         }
 
-        public void EditDescriptionVOText(string text)
+        public void EditDescriptionText(string text)
         {
             DescriptionText = text;
             Validate();

@@ -1,5 +1,6 @@
 ﻿using CWebStore.Domain.Commands;
-using CWebStore.Domain.Handlers;
+using CWebStore.Domain.Commands.CategoryCommands;
+using CWebStore.Domain.Handlers.CategoryHandlers;
 using CWebStore.Domain.Repositories.Interfaces;
 using Moq;
 

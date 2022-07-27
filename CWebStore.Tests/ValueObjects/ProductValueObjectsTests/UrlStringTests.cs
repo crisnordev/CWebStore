@@ -5,6 +5,13 @@ namespace CWebStore.Tests.ValueObjects.ProductValueObjectsTests;
 [TestClass]
 public class UrlStringTests
 {
+    private readonly UrlString _urlString;
+
+    public UrlStringTests()
+    {
+        _urlString = new UrlString("https://docs.microsoft.com");
+    }
+
     [TestMethod]
     [TestCategory("CWebStore.Shared.ValueObjects")]
     public void Given_a_url_greater_than_2048_should_return_error_message()
@@ -25,27 +32,36 @@ public class UrlStringTests
     {
         var urlString = new UrlString(string.Empty);
         var message = "This is not a valid Url.";
-        var urlStringError = urlString.Notifications.First();
-        Assert.AreEqual(message, urlStringError.Message);
+        Assert.AreEqual(message, urlString.Notifications.First().Message);
     }
     
     [TestMethod]
     [TestCategory("CWebStore.Shared.ValueObjects")]
-    public void Given_a_url_invalid_should_return_error_message()
+    public void Given_an_invalid_url_should_return_error_message()
     {
         var urlString = new UrlString("this_is_not_a_valid_url_string_test");
         var message = "This is not a valid Url.";
-        var urlStringError = urlString.Notifications.First();
-        Assert.AreEqual(message, urlStringError.Message);
+        Assert.AreEqual(message, urlString.Notifications.First().Message);
     }
     
     [TestMethod]
     [TestCategory("CWebStore.Shared.ValueObjects")]
-    public void Given_a_url_valid_should_return_IsValid()
+    public void Given_a_valid_url_EditUrlPropertyString_should_return_error_message()
     {
-        var urlString = new UrlString("this_is_not_a_valid_url_string_test");
+        _urlString.EditUrlPropertyString(string.Empty);
         var message = "This is not a valid Url.";
-        var urlStringError = urlString.Notifications.First();
-        Assert.AreEqual(message, urlStringError.Message);
+        Assert.AreEqual(message, _urlString.Notifications.First().Message);
     }
+    
+    [TestMethod]
+    [TestCategory("CWebStore.Shared.ValueObjects")]
+    public void Given_a_valid_url_EditUrlPropertyString_should_return_IsValid()
+    {
+        _urlString.EditUrlPropertyString("https://docs.microsoft.com/isvalid");
+        Assert.IsTrue(_urlString.IsValid);
+    }
+    
+    [TestMethod]
+    [TestCategory("CWebStore.Shared.ValueObjects")]
+    public void Given_a_valid_url_should_return_IsValid() => Assert.IsTrue(_urlString.IsValid);
 }

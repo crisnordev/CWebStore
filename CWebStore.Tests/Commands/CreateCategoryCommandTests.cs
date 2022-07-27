@@ -1,4 +1,4 @@
-﻿using CWebStore.Domain.Commands;
+﻿using CWebStore.Domain.Commands.CategoryCommands;
 
 namespace CWebStore.Tests.Commands;
 

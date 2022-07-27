@@ -33,10 +33,10 @@ public class CategoryNameTests
     
     [TestMethod]
     [TestCategory("CWebStore.Shared.ValueObjects")]
-    public void Given_a_valid_category_name_EditCategoryNameVOName_invalid_should_return_error_message()
+    public void Given_a_valid_category_name_EditCategoryName_invalid_should_return_error_message()
     {
         var categoryName = new CategoryName("Valid Category Name");
-        categoryName.EditCategoryNameVOName(string.Empty);
+        categoryName.EditCategoryName(string.Empty);
         var message = "Category name must not be null or empty.";
         Assert.AreEqual(message, categoryName.Notifications.First().Message);
     }
@@ -51,10 +51,10 @@ public class CategoryNameTests
     
     [TestMethod]
     [TestCategory("CWebStore.Shared.ValueObjects")]
-    public void Given_a_valid_category_name_EditCategoryNameVOName_valid_should_return_IsValid()
+    public void Given_a_valid_category_name_EditCategoryName_valid_should_return_IsValid()
     {
         var categoryName = new CategoryName("Valid Category Name");
-        categoryName.EditCategoryNameVOName("Another valid Category Name");
+        categoryName.EditCategoryName("Another valid Category Name");
         Assert.IsTrue(categoryName.IsValid);
     }
 }

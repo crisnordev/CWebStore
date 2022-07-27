@@ -1,4 +1,4 @@
-﻿namespace CWebStore.Domain.Commands;
+﻿namespace CWebStore.Domain.Commands.CategoryCommands;
 
 public class CreateCategoryCommand : Notifiable<Notification>, ICommand
 {

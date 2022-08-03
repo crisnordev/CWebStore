@@ -11,29 +11,29 @@ public class ProductHandler : Notifiable<Notification>, IHandler<CreateProductCo
         _repository = repository;
     }
 
-    public ICommandResult Handle(CreateProductCommand command)
+    public IResult Handle(CreateProductCommand command)
     {
         command.Validate();
         if(!command.IsValid)
         {
-            return new CommandResult(false, "This is not a valid Product.", 
-                new List<Notification>(command.Notifications));
+            return new Result(false, "This is not a valid Product.", 
+                command.Notifications.ToList());
         }
 
         if (_repository.ProductExists(command.ProductName))
-            return new CommandResult(false, "This Product already exists.");
+            return new Result(true, "This Product already exists.");
 
-            var product = new Product(new ProductName(command.ProductName), new Price(command.SellValue), 
+        var product = new Product(new ProductName(command.ProductName), new Price(command.SellValue), 
             new Quantity(command.StockQuantity), new Description(command.ProductDescription), 
             new Manufacturer(command.ManufacturerName), new FileName(command.ImageFileName), 
             new UrlString(command.ImageUrl));
 
         if (!product.IsValid)
-            return new CommandResult(false, "Can not save this Product.", 
-                new List<Notification>(product.Notifications));
+            return new Result(false, "Can not save this Product.", 
+                product.Notifications.ToList());
 
         _repository.PostProduct(product);
         
-        return new CommandResult(true, "Product successfully saved.");
+        return new Result(true, "Product was successfully created.", product);
     }
 }

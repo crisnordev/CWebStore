@@ -4,9 +4,13 @@ public interface ICategoryRepository
 {
     bool CategoryExists(string categoryName);
 
-    void PostCategory(Category category);
+    IList<Category> GetAllCategories();
 
-    void UpdateCategory(Category category);
+    Category GetCategoryById(Guid id);
 
-    void DeleteCategory(Guid id);
+    IResult PostCategory(Category category);
+
+    IResult UpdateCategory(Category category);
+
+    IResult DeleteCategory(Guid id);
 }

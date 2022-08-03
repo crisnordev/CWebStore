@@ -162,6 +162,15 @@ public class ProductTests
     
     [TestMethod]
     [TestCategory("CWebStore.Domain.Entities")]
+    public void Given_valid_product_AddCategory_with_valid_category_should_return_same_category_name()
+    {
+        _product.AddCategory(_category);
+        var category = _product.Categories.FirstOrDefault();
+        Assert.AreEqual("Category", category.CategoryName.Name);
+    }
+    
+    [TestMethod]
+    [TestCategory("CWebStore.Domain.Entities")]
     public void Given_valid_product_RemoveCategory_with_an_valid_guid_should_return_IsValid()
     {
         _product.AddCategory(_category);

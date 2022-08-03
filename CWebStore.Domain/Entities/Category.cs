@@ -14,7 +14,7 @@ public class Category : Entity, IValidatable
 
     public CategoryName CategoryName { get; private set; }
 
-    public IReadOnlyCollection<Product>? Products => _products.ToArray();
+    public IReadOnlyCollection<Product> Products => _products.ToArray();
 
     public void Validate()
     {

@@ -4,11 +4,13 @@ public interface IProductRepository
 {
     bool ProductExists(string productName);
 
-    void PostProduct(Product product);
+    IList<Product> GetAllProducts();
 
-    void UpdateProduct(Product product);
+    Product GetProductById(Guid id);
 
-    void DeleteProduct(Guid id);
+    IResult PostProduct(Product product);
 
-    void AddCategory(Category category);
+    IResult UpdateProduct(Product product);
+
+    IResult DeleteProduct(Guid id);
 }

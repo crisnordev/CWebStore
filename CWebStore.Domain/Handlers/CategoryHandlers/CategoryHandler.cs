@@ -10,30 +10,26 @@ public class CategoryHandler : Notifiable<Notification>, IHandler<CreateCategory
     {
         _repository = repository;
     }
-    public ICommandResult Handle(CreateCategoryCommand command)
+    public IResult Handle(CreateCategoryCommand command)
     {
         command.Validate();
         if (!command.IsValid)
         {
-            return new CommandResult(false, "This is not a valid Category.", 
-                new List<Notification>(command.Notifications));
+            return new Result(false, "This is not a valid Category.", 
+                command.Notifications.ToList());
         }
         
         if (_repository.CategoryExists(command.Name))
-            return new CommandResult(false, "This category already exists.");
+            return new Result(false, "This category already exists.");
 
         var category = new Category(new CategoryName(command.Name));
 
         if (!category.IsValid)
-            return new CommandResult(false, "Can not save this Category.", 
-                new List<Notification>(category.Notifications));
+            return new Result(false, "Can not save this Category.", category,
+                category.Notifications.ToList());
         
         _repository.PostCategory(category);
         
-        return new CommandResult(true, "Category successfully saved.", new
-        {
-            category.Id,
-            category.CategoryName.Name
-        });
+        return new Result(true, "Category was successfully created.", category);
     }
 }

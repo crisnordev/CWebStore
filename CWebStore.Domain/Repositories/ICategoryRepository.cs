@@ -2,15 +2,15 @@
 
 public interface ICategoryRepository
 {
-    bool CategoryExists(string categoryName);
+    Task<bool> CategoryExists(string categoryName);
 
-    IList<Category> GetAllCategories();
+    Task<IEnumerable<Category>> GetAllCategories();
 
-    Category GetCategoryById(Guid id);
+    Task<Category> GetCategoryById(Guid id);
 
-    IResult PostCategory(Category category);
+    Task<Category> PostCategory(Category category);
 
-    IResult UpdateCategory(Category category);
+    Task<Category> UpdateCategory(Category category);
 
-    IResult DeleteCategory(Guid id);
+    Task<Category> DeleteCategory(Category category);
 }

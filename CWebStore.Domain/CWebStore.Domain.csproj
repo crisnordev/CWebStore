@@ -8,6 +8,12 @@
     <PackageReference Include="flunt" Version="2.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Handlers\ProductHandlers\CreateProductCommandHandler.cs" />
+    <Compile Remove="Handlers\ProductHandlers\ProductQueryHandler.cs" />
+    <Compile Remove="Queries\ICategoryQueries.cs" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

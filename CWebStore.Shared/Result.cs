@@ -1,29 +1,18 @@
 ﻿namespace CWebStore.Shared;
 
-public class Result : IResult
+public class Result<T> : Notifiable<Notification>,IResult
 {
     public Result() { }
 
-    public Result(bool success) 
-    {
-        Success = success;
-    }
-    
-    public Result(object data)
+    public Result(T data)
     {
         Data = data;
     }
-    
-    public Result(IEnumerable<object> dataList)
+
+    public Result(T data, string message)
     {
-        DataList = new List<object>();
-        DataList.ToList().AddRange(dataList);
-    }
-    
-    public Result(bool success, object data)
-    {
-        Success = success;
         Data = data;
+        Message = message;
     }
 
     public Result(bool success, string message)
@@ -32,38 +21,24 @@ public class Result : IResult
         Message = message;
     }
 
-    public Result(bool success, string message, object data)
+    public Result(bool success, T data)
     {
         Success = success;
-        Message = message;
         Data = data;
     }
 
-    public Result(bool success, string message, IEnumerable<Notification> notifications)
+    public Result(bool success, T data, string message)
     {
         Success = success;
-        Message = message;
-        Notifications = new List<Notification>();
-        Notifications.ToList().AddRange(notifications);
-    }
-
-    public Result(bool success, string message, object data, IEnumerable<Notification> notifications)
-    {
-        Success = success;
-        Message = message;
         Data = data;
-        Notifications = new List<Notification>();
-        notifications.ToList().AddRange(notifications);
+        Message = message;
     }
-
 
     public bool Success { get; set; }
 
-    public string Message { get; set; }
-
-    public object Data { get; set; }
-
-    public IEnumerable<object> DataList { get; set; }
+    public T Data { get; set; }
     
-    public IEnumerable<Notification> Notifications { get; set; }
+    public string Message { get; set; }
+    
+    
 }

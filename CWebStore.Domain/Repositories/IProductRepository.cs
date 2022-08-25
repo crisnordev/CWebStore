@@ -2,15 +2,15 @@
 
 public interface IProductRepository
 {
-    bool ProductExists(string productName);
+    Task<bool> ProductExists(string productName);
 
-    IList<Product> GetAllProducts();
+    Task<IEnumerable<Product>> GetAllProducts();
 
-    Product GetProductById(Guid id);
+    Task<Product> GetProductById(Guid id);
 
-    IResult PostProduct(Product product);
+    Task<Product> PostProduct(Product product);
 
-    IResult UpdateProduct(Product product);
+    Task<Product> UpdateProduct(Product product);
 
-    IResult DeleteProduct(Guid id);
+    Task<Product> DeleteProduct(Product product);
 }

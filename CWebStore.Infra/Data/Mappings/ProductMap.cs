@@ -55,7 +55,7 @@ public class ProductMap : IEntityTypeConfiguration<Product>
             .Property(x => x.Name)
             .HasColumnName("Manufacturer")
             .HasColumnType("NVARCHAR")
-            .HasMaxLength(120);
+            .HasMaxLength(80);
 
         builder.OwnsOne(x => x.ImageFileName)
             .Property(x => x.Name)

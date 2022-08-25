@@ -1,8 +1,8 @@
 ﻿namespace CWebStore.Tests.Mocks;
 
-public class FakeProduct
+public class FakeProductCategory
 {
-    public FakeProduct()
+    public FakeProductCategory()
     {
         Product = new Product(new ProductName("First product"), new Price(10, 10), new Quantity(10), 
             new Description("Description"), new Manufacturer("Manufacturer"), new FileName("file.png"), 

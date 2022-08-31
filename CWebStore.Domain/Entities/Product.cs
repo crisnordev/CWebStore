@@ -4,31 +4,25 @@ public class Product : Entity, IValidatable
 {
     private IList<Category> _categories;
 
-    protected Product() { }
-
-    public Product(ProductName productName, Price price, Quantity stockQuantity)
+    protected Product()
     {
-        ProductName = productName;
-        Price = price;
-        StockQuantity = stockQuantity;
         _categories = new List<Category>();
-        Validate();
     }
 
-    public Product(ProductName productName, Price price, Quantity stockQuantity, Description description,
-        Manufacturer manufacturer, FileName imageFileName, UrlString imageUrl)
+    public Product(string productName, decimal sellPrice, int stockQuantity)
     {
-        ProductName = productName;
-        Price = price;
-        StockQuantity = stockQuantity;
-        Description = description;
-        Manufacturer = manufacturer;
-        ImageFileName = imageFileName;
-        ImageUrl = imageUrl;
         _categories = new List<Category>();
-        Validate();
-    }
+        
+        var name = new ProductName(productName);
+        var price = new Price(sellPrice);
+        var quantity = new Quantity(stockQuantity);
+        Validate(name, price, quantity);
 
+        ProductName = name;
+        Price = price;
+        StockQuantity = quantity;
+    }
+    
     public ProductName ProductName { get; private set; }
 
     public Price Price { get; private set; }
@@ -45,38 +39,32 @@ public class Product : Entity, IValidatable
 
     public IReadOnlyCollection<Category> Categories => _categories.ToArray();
 
-    public void Validate()
-    {
-        AddNotifications(ProductName, Description, Manufacturer, StockQuantity, Price,
-            ImageFileName, ImageUrl);
+    public void Validate(ProductName productName, Price sellPrice, Quantity stockQuantity) =>
+        AddNotifications(productName, sellPrice, stockQuantity);
 
-        foreach (var category in Categories)
-            AddNotifications(category);
-    }
+    public void Validate(Category category) =>
+        AddNotifications(category);
 
     public void AddCategory(Category category)
     {
-        category.Validate();
+        Validate(category);
 
-        if (!category.IsValid)
-            AddNotification("Product.AddCategory", "Can not add this category.");
-
-        if (_categories.Any(x => x.Id == category.Id))
-            AddNotification("Product.Categories", "This category has already been added.");
+        if (!IsValid)
+            AddNotification("Product.AddCategory", "This is not a valid category.");
 
         _categories.Add(category);
     }
 
     public void RemoveCategory(Guid id)
     {
-        if (id == null || id == Guid.Empty)
-            AddNotification("Product.Categories", "This id can not be null or empty.");
+        var category = _categories.FirstOrDefault(x => x.Id == id);
+        AddNotifications(new Contract<Product>()
+            .IsNotEmpty(id, "Product.RemoveCategory", "This id can not be null or empty.")
+            .AreEquals(category.Id, id, "Product.RemoveCategory", 
+                "Can not find this category."));
+        if (!IsValid) return;
         
-        else if (_categories.All(x => x.Id != id))
-            AddNotification("Product.Categories", "Can not find this category.");
-
-        else
-            _categories.Remove(_categories.First(x => x.Id == id));
+        _categories.Remove(_categories.First(x => x.Id == id));
     }
 
     public void EditProductName(string name)

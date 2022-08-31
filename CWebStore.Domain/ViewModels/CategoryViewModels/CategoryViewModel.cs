@@ -1,8 +1,18 @@
 ﻿namespace CWebStore.Domain.ViewModels.CategoryViewModels;
 
-public class CategoryViewModel
+public class CategoryViewModel: Notifiable<Notification>
 {
     public CategoryViewModel() { }
+
+    public CategoryViewModel(Guid id)
+    {
+        Id = id;
+    }
+
+    public CategoryViewModel(string name)
+    {
+        Name = name;
+    }
 
     public CategoryViewModel(Guid id, string name)
     {
@@ -14,9 +24,5 @@ public class CategoryViewModel
 
     public string Name { get; set; }
 
-    public static implicit operator CategoryViewModel(Category category) => new()
-    {
-        Id = category.Id,
-        Name = category.CategoryName.Name
-    };
+    public static implicit operator CategoryViewModel(Category category) => new(category.CategoryName.Name);
 }

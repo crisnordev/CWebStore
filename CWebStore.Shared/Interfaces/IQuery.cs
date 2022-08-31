@@ -1,5 +1,3 @@
 ﻿namespace CWebStore.Shared.Interfaces;
 
-public class IQuery : Notifiable<Notification>
-{
-}
+public interface IQuery { }

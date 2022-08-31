@@ -3,7 +3,10 @@ using CWebStore.Domain.Commands.CategoryCommands.Response;
 
 namespace CWebStore.Domain.Handlers.CategoryHandlers;
 
-public class CategoryCommandsHandler : Notifiable<Notification>, ICommandHandler<CreateCategoryRequestCommand>
+public class CategoryCommandsHandler : Notifiable<Notification>, 
+    ICommandHandler<CreateCategoryRequestCommand>,
+    ICommandHandler<UpdateCategoryRequestCommand>,
+    ICommandHandler<DeleteCategoryRequestCommand>
 {
     private readonly ICategoryRepository _repository;
 
@@ -11,16 +14,12 @@ public class CategoryCommandsHandler : Notifiable<Notification>, ICommandHandler
     {
         _repository = repository;
     }
-    
-    public IResult Handle(CreateCategoryRequestCommand command)
-    {
-        var categoryExists = _repository.CategoryExists(command.Name);
-        if (categoryExists.Result)
-            return new Result<CreateCategoryRequestCommand>(false, command, "This category already exists.");
 
-        var category = new Category(new CategoryName(command.Name));
-        _repository.PostCategory(category);
+    public IResult Handle(CreateCategoryRequestCommand command) =>
+        new CreateCategoryResponseCommand(_repository, command);
 
-        return new Result<CreateCategoryResponseCommand>(true, category, "Category created.");
-    }
+    public IResult Handle(UpdateCategoryRequestCommand command) =>
+        new UpdateCategoryResponseCommand(_repository, command);
+    public IResult Handle(DeleteCategoryRequestCommand command) =>
+        new DeleteCategoryResponseCommand(_repository, command);
 }

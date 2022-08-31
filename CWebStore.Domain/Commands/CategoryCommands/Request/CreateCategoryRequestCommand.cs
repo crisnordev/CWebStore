@@ -2,7 +2,7 @@
 
 namespace CWebStore.Domain.Commands.CategoryCommands.Request;
 
-public class CreateCategoryRequestCommand : Notifiable<Notification>, ICommand
+public class CreateCategoryRequestCommand : ICommand
 {
     public CreateCategoryRequestCommand() { }
 
@@ -16,5 +16,4 @@ public class CreateCategoryRequestCommand : Notifiable<Notification>, ICommand
     [MinLength(2, ErrorMessage = "Category name must have two or more characters.")]
     [MaxLength(80, ErrorMessage = "Category name must have 80 or less characters.")]
     public string Name { get; set; }
-    
 }

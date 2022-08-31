@@ -2,5 +2,11 @@
 
 public interface ICategoryQueries
 {
-    Task<IEnumerable<Product>> GetCategoryProducts();
+    Task<List<Category>> GetCategories();
+
+    Task<Category> GetCategoryById(Guid id);
+    
+    Task<Category> GetCategoryByName(string name);
+    
+    Task<Category> GetCategoryProducts(Guid id);
 }

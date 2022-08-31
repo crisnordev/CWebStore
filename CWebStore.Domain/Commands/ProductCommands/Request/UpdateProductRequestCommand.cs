@@ -3,27 +3,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CWebStore.Domain.Commands.ProductCommands.Request;
 
-public class CreateProductRequestCommand : Notifiable<Notification>, ICommand
+public class UpdateProductRequestCommand : Notifiable<Notification>, ICommand
 {
-    public CreateProductRequestCommand() { }
+    public UpdateProductRequestCommand() { }
 
+    [Display(Name = "Product Id")] public Guid ProductId { get; set; }
+    
     [Display(Name = "Name")]
     [Required(ErrorMessage = "Product name is required.")]
     [MinLength(2, ErrorMessage = "Product name must have two or more characters.")]
     [MaxLength(120, ErrorMessage = "Product name must have 120 or less characters.")]
     public string ProductName { get; set; }
-    
-    [Display(Name = "Sell value")]
-    [Required(ErrorMessage = "Sell value is required.")]
-    [Range(0, 100000)]
-    [DataType(DataType.Currency)]
-    [Column(TypeName = "decimal(18, 2)")]
-    public decimal SellValue { get; set; }
-    
-    [Display(Name = "Stock quantity")]
-    [Required(ErrorMessage = "Stock quantity is required.")]
-    [Range(0, 100000)]
-    public int StockQuantity { get; set; }
     
     [Display(Name = "Description")]
     [Required(ErrorMessage = "Product description is required.")]
@@ -36,6 +26,13 @@ public class CreateProductRequestCommand : Notifiable<Notification>, ICommand
     [MinLength(2, ErrorMessage = "Product Manufacturer must have two or more characters.")]
     [MaxLength(80, ErrorMessage = "Product Manufacturer must have 80 or less characters.")]
     public string ManufacturerName { get; set; }
+    
+    [Display(Name = "Sell value")]
+    [Required(ErrorMessage = "Sell value is required.")]
+    [Range(0, 100000)]
+    [DataType(DataType.Currency)]
+    [Column(TypeName = "decimal(18, 2)")]
+    public decimal SellValue { get; set; }
 
     [Display(Name = "Buy value")]
     [Required(ErrorMessage = "Buy value is required.")]
@@ -49,6 +46,11 @@ public class CreateProductRequestCommand : Notifiable<Notification>, ICommand
     [Range(0, 100)]
     [Column(TypeName = "decimal(18, 2)")]
     public decimal Percentage { get; set; }
+    
+    [Display(Name = "Stock quantity")]
+    [Required(ErrorMessage = "Stock quantity is required.")]
+    [Range(0, 100000)]
+    public int StockQuantity { get; set; }
 
     [Display(Name = "Image file name")]
     [Required(ErrorMessage = "Image file name is required."), 

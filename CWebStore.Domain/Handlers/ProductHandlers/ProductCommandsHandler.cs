@@ -3,7 +3,10 @@ using CWebStore.Domain.Commands.ProductCommands.Response;
 
 namespace CWebStore.Domain.Handlers.ProductHandlers;
 
-public class ProductCommandsHandler : Notifiable<Notification>, ICommandHandler<CreateProductRequestCommand>
+public class ProductCommandsHandler : Notifiable<Notification>, 
+    ICommandHandler<CreateProductRequestCommand>,
+    ICommandHandler<DeleteProductRequestCommand>,
+    ICommandHandler<UpdateProductRequestCommand>
 {
     private readonly IProductRepository _repository;
 
@@ -11,20 +14,13 @@ public class ProductCommandsHandler : Notifiable<Notification>, ICommandHandler<
     {
         _repository = repository;
     }
-    
-    public IResult Handle(CreateProductRequestCommand command)
-    {
-        var productExists = _repository.ProductExists(command.ProductName);
-        if (productExists.Result)
-            return new Result<CreateProductRequestCommand>(false, command, "This product already exists.");
 
-        var product = new Product(new ProductName(command.ProductName), new Price(command.SellValue),
-            new Quantity(command.StockQuantity), new Description(command.ProductDescription),
-            new Manufacturer(command.ManufacturerName), new FileName(command.ImageFileName),
-            new UrlString(command.ImageUrl));
-        
-        _repository.PostProduct(product);
+    public IResult Handle(CreateProductRequestCommand command) =>
+        new CreateProductResponseCommand(_repository, command);
 
-        return new Result<CreateProductResponseCommand>(true, product, "Product created.");
-    }
+    public IResult Handle(UpdateProductRequestCommand command) =>
+        new UpdateProductResponseCommand(_repository, command);
+
+    public IResult Handle(DeleteProductRequestCommand command) =>
+        new DeleteProductResponseCommand(_repository, command);
 }

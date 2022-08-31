@@ -1,9 +1,15 @@
 ﻿namespace CWebStore.Domain.ViewModels.ProductViewModels;
 
-public class ProductViewModel
+public class ProductViewModel : Notifiable<Notification>
 {
     public ProductViewModel() { }
 
+    public ProductViewModel(string name, decimal price)
+    {
+        Name = name;
+        Price = price;
+    }
+    
     public ProductViewModel(Guid id, string name, decimal price)
     {
         Id = id;

@@ -4,7 +4,11 @@ using CWebStore.Domain.Queries.CategoryQueries.Response;
 
 namespace CWebStore.Domain.Handlers.CategoryHandlers;
 
-public class CategoryQueriesHandler : Notifiable<Notification>, IQueryHandler<GetCategoryProductsRequest>
+public class CategoryQueriesHandler : Notifiable<Notification>, 
+    IQueryHandler<GetCategoriesRequestQuery>,
+    IQueryHandler<GetCategoryByIdRequestQuery>,
+    IQueryHandler<GetCategoryByNameRequestQuery>,
+    IQueryHandler<GetCategoryProductsRequestQuery>
 {
     private readonly ICategoryQueries _categoryQueries;
 
@@ -13,10 +17,15 @@ public class CategoryQueriesHandler : Notifiable<Notification>, IQueryHandler<Ge
         _categoryQueries = categoryQueries;
     }
 
-    public IResult Handle(GetCategoryProductsRequest query)
-    {
-        var products = _categoryQueries.GetCategoryProducts();
-        return new Result<GetCategoryProductsResponseQuery>(true, products.Result.ToList(), 
-            "Category products list created.");
-    }
+    public IResult Handle(GetCategoryProductsRequestQuery query) => 
+        new GetCategoryProductsResponseQuery(_categoryQueries, query.CategoryId);
+
+    public IResult Handle(GetCategoriesRequestQuery query) =>
+        new GetCategoriesResponseQuery(_categoryQueries);
+
+    public IResult Handle(GetCategoryByIdRequestQuery query) =>
+        new GetCategoryByIdResponseQuery(_categoryQueries, query.CategoryId);
+    
+    public IResult Handle(GetCategoryByNameRequestQuery query) =>
+        new GetCategoryByNameResponseQuery(_categoryQueries, query.CategoryName);
 }

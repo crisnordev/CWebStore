@@ -1,35 +1,39 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using CWebStore.Domain.Commands.CategoryCommands.Response;
+using CWebStore.Domain.Commands.ProductCommands.Request;
+using CWebStore.Domain.ViewModels.ProductViewModels;
 
 namespace CWebStore.Domain.Commands.ProductCommands.Response;
 
-public class CreateProductResponseCommand : Notifiable<Notification>, IResult
+public class CreateProductResponseCommand : Result
 {
     public CreateProductResponseCommand() { }
 
-
-    public CreateProductResponseCommand(Product product)
+    public CreateProductResponseCommand(IProductRepository productRepository, CreateProductRequestCommand command)
     {
-        ProductId = product.Id;
-        Name = product.ProductName.Name;
-        Price = product.Price.SellValue;
-        StockQuantity = product.StockQuantity.QuantityValue;
-    }
+        var exists = productRepository.ProductExists(command.ProductName).Result;
+        Validate(exists);
+        if (!IsValid) return;
 
-    [Display(Name = "Product Id")] public Guid ProductId { get; set; }
-    
-    [Display(Name = "Name")] public string Name { get; private set; }
-
-    [Display(Name = "Price")] public decimal Price { get; private set; }
-
-    [Display(Name = "Stock quantity")] public int StockQuantity { get; private set; }
-
-    public static implicit operator CreateProductResponseCommand(Product product) =>
-        new()
+        var product = new Product(command.ProductName, command.SellValue, command.StockQuantity) ;
+        if (!string.IsNullOrEmpty(command.ProductDescription))
         {
-            ProductId = product.Id,
-            Name = product.ProductName.Name,
-            Price = product.Price.SellValue,
-            StockQuantity = product.StockQuantity.QuantityValue
-        };
+            product.EditProductBuyValue(command.BuyValue);
+            product.EditProductPercentage(command.Percentage);
+            product.EditProductDescription(command.ProductDescription);
+            product.EditProductManufacturer(command.ManufacturerName);
+            product.EditProductFileName(command.ImageFileName);
+            product.EditProductUrl(command.ImageUrl);
+        }
+        
+        Product = productRepository.PostProduct(product).Result;
+        Success = true;
+        Message = "Product created.";
+    }
+    
+    
+    [Display(Name = "Name")] public ProductViewModel Product { get; private set; }
+    
+    public void Validate(bool exists) =>
+        AddNotifications(new Contract<CreateProductResponseCommand>()
+            .IsFalse(exists, "CreateProductResponseCommand.Product", "This product already exists."));
 }

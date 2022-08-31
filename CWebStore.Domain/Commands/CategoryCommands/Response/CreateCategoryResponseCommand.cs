@@ -1,27 +1,27 @@
-﻿using System.ComponentModel.DataAnnotations;
-using CWebStore.Domain.Commands.CategoryCommands.Request;
-using CWebStore.Domain.Entities;
+﻿using CWebStore.Domain.Commands.CategoryCommands.Request;
+using CWebStore.Domain.ViewModels.CategoryViewModels;
 
 namespace CWebStore.Domain.Commands.CategoryCommands.Response;
 
-public class CreateCategoryResponseCommand : Notifiable<Notification>, IResult
+public class CreateCategoryResponseCommand : Result
 {
     public CreateCategoryResponseCommand() { }
 
-    public CreateCategoryResponseCommand(Category category)
+    public CreateCategoryResponseCommand(ICategoryRepository categoryRepository, CreateCategoryRequestCommand command)
     {
-        CategoryId = category.Id;
-        Name = category.CategoryName.Name;
+        var exists = categoryRepository.CategoryExists(command.Name).Result;
+        Validate(exists);
+        if (!IsValid) return;
+
+        Category = categoryRepository.PostCategory(new Category(new CategoryName(command.Name))).Result;
+        Success = true;
+        Message = "Category created.";
     }
 
-    [Display(Name = "Category Id")] public Guid CategoryId { get; set; }
+    public CategoryViewModel Category { get; set; }
 
-    [Display(Name = "Name")] public string Name { get; set; }
-
-    public static implicit operator CreateCategoryResponseCommand(Category category) =>
-        new()
-        {
-            CategoryId = category.Id,
-            Name = category.CategoryName.Name
-        };
+    public void Validate(bool exists) =>
+        AddNotifications(new Contract<CreateCategoryResponseCommand>()
+            .IsFalse(exists, "CreateCategoryResponseCommand.Category",
+                "This category already exists."));
 }

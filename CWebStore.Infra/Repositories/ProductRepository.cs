@@ -32,19 +32,15 @@ public class ProductRepository : IProductRepository
         return product;
     }
 
-    public async Task<Product> UpdateProduct(Product product)
+    public async void UpdateProduct(Product product)
     {
         _context.Entry(product).State = EntityState.Modified;
         await _context.SaveChangesAsync();
-        
-        return product;
     }
 
-    public async Task<Product> DeleteProduct(Product product)
+    public async void DeleteProduct(Product product)
     {
         _context.Products.Remove(product);
         await _context.SaveChangesAsync();
-        
-        return product;
     }
 }

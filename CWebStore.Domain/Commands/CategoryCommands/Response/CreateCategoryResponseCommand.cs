@@ -5,15 +5,19 @@ namespace CWebStore.Domain.Commands.CategoryCommands.Response;
 
 public class CreateCategoryResponseCommand : Result
 {
+    private readonly ICategoryRepository _categoryRepository;
+    
     public CreateCategoryResponseCommand() { }
 
     public CreateCategoryResponseCommand(ICategoryRepository categoryRepository, CreateCategoryRequestCommand command)
     {
-        var exists = categoryRepository.CategoryExists(command.Name).Result;
+        _categoryRepository = categoryRepository;
+        
+        var exists = _categoryRepository.CategoryExists(command.Name).Result;
         Validate(exists);
         if (!IsValid) return;
 
-        Category = categoryRepository.PostCategory(new Category(new CategoryName(command.Name))).Result;
+        Category = _categoryRepository.PostCategory(new Category(command.Name)).Result;
         Success = true;
         Message = "Category created.";
     }

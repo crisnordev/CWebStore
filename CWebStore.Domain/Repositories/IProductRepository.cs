@@ -5,10 +5,14 @@ public interface IProductRepository
     Task<bool> ProductExists(string productName);
 
     Task<Product> GetProductById(Guid id);
+    
+    Task<Category> GetCategoryById(Guid id);
+
+    Task<Product> GetProductWithCategories(Guid id);
 
     Task<Product> PostProduct(Product product);
 
     void UpdateProduct(Product product);
-
+    
     void DeleteProduct(Product product);
 }

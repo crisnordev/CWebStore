@@ -5,11 +5,11 @@ using CWebStore.Domain.Queries.ProductQueries.Response;
 namespace CWebStore.Domain.Handlers.ProductHandlers;
 
 public class ProductQueriesHandler : Notifiable<Notification>, 
-    IQueryHandler<GetProductsRequestQuery>,
-    IQueryHandler<GetProductByIdRequestQuery>,
-    IQueryHandler<GetProductByNameRequestQuery>,
-    IQueryHandler<GetProductsInStockRequestQuery>,
-    IQueryHandler<GetProductsOutOfStockRequestQuery>
+    IQueryHandler<GetProductsRequest>,
+    IQueryHandler<GetProductByIdRequest>,
+    IQueryHandler<GetProductByNameRequest>,
+    IQueryHandler<GetProductsInStockRequest>,
+    IQueryHandler<GetProductsOutOfStockRequest>
 {
     private readonly IProductQueries _productQueries;
 
@@ -18,18 +18,18 @@ public class ProductQueriesHandler : Notifiable<Notification>,
         _productQueries = productQueries;
     }
 
-    public IResult Handle(GetProductsRequestQuery query) =>
-        new GetProductsResponseQuery(_productQueries);
+    public IResult Handle(GetProductsRequest query) =>
+        new GetProductsResponse(_productQueries);
 
-    public IResult Handle(GetProductByIdRequestQuery query) =>
-        new GetProductByIdResponseQuery(_productQueries, query.ProductId);
+    public IResult Handle(GetProductByIdRequest query) =>
+        new GetProductByIdResponse(_productQueries, query.ProductId);
 
-    public IResult Handle(GetProductByNameRequestQuery query) =>
-        new GetProductByNameResponseQuery(_productQueries, query.ProductName);
+    public IResult Handle(GetProductByNameRequest query) =>
+        new GetProductByNameResponse(_productQueries, query.ProductName);
 
-    public IResult Handle(GetProductsInStockRequestQuery query) =>
-        new GetProductsInStockResponseQuery(_productQueries);
+    public IResult Handle(GetProductsInStockRequest query) =>
+        new GetProductsInStockResponse(_productQueries);
 
-    public IResult Handle(GetProductsOutOfStockRequestQuery query) =>
-        new GetProductsOutOfStockResponseQuery(_productQueries);
+    public IResult Handle(GetProductsOutOfStockRequest query) =>
+        new GetProductsOutOfStockResponse(_productQueries);
 }

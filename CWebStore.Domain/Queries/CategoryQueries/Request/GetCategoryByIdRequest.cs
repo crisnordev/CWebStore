@@ -2,9 +2,9 @@
 
 namespace CWebStore.Domain.Queries.CategoryQueries.Request;
 
-public class GetCategoryProductsRequestQuery : Notifiable<Notification>, IQuery
+public class GetCategoryByIdRequest : Notifiable<Notification>, IQuery
 {
-    public GetCategoryProductsRequestQuery() { }
-    
+    public GetCategoryByIdRequest() { }
+
     [Display(Name = "Category Id")] public Guid CategoryId { get; set; }
 }

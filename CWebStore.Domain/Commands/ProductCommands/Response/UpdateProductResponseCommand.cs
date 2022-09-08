@@ -6,11 +6,15 @@ namespace CWebStore.Domain.Commands.ProductCommands.Response;
 
 public class UpdateProductResponseCommand : Result
 {
+    private readonly IProductRepository _productRepository;
+    
     public UpdateProductResponseCommand() { }
 
     public UpdateProductResponseCommand(IProductRepository productRepository, UpdateProductRequestCommand command)
     {
-        var product = productRepository.GetProductById(command.ProductId).Result;
+        _productRepository = productRepository;
+        
+        var product = _productRepository.GetProductById(command.ProductId).Result;
         Validate(product.ProductName.Name);
         if (!IsValid) return;
         
@@ -26,7 +30,7 @@ public class UpdateProductResponseCommand : Result
         AddNotifications(product);
         if (!IsValid) return;
         
-        productRepository.UpdateProduct(product);
+        _productRepository.UpdateProduct(product);
         ProductName = product.ProductName.Name;
         Success = true;
         Message = "Product updated.";

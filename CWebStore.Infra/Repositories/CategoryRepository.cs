@@ -31,7 +31,7 @@ public class CategoryRepository : ICategoryRepository
 
     public async void UpdateCategory(Category category)
     {
-        _context.Entry(category).State = EntityState.Modified;
+        _context.Categories.Update(category);
         await _context.SaveChangesAsync();
     }
 

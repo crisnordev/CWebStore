@@ -2,9 +2,9 @@
 
 namespace CWebStore.Domain.Queries.CategoryQueries.Request;
 
-public class GetCategoryByNameRequestQuery : Notifiable<Notification>, IQuery
+public class GetCategoryByNameRequest : Notifiable<Notification>, IQuery
 {
-    public GetCategoryByNameRequestQuery() { }
+    public GetCategoryByNameRequest() { }
 
     [Display(Name = "Category name")] public string CategoryName { get; set; }
 }

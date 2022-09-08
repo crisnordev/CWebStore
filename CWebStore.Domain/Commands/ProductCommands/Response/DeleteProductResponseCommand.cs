@@ -5,16 +5,19 @@ namespace CWebStore.Domain.Commands.ProductCommands.Response;
 
 public class DeleteProductResponseCommand : Result
 {
+    private readonly IProductRepository _productRepository;
+    
     public DeleteProductResponseCommand() { }
 
     public DeleteProductResponseCommand(IProductRepository productRepository, DeleteProductRequestCommand command)
     {
-        var product = productRepository.GetProductById(command.Id).Result;
+        _productRepository = productRepository;
+        var product = _productRepository.GetProductById(command.Id).Result;
         var productName = product.ProductName.Name;
         Validate(productName);
         if (!IsValid) return;
 
-        productRepository.DeleteProduct(product);
+        _productRepository.DeleteProduct(product);
         ProductName = productName;
         Success = true;
         Message = "Category deleted.";

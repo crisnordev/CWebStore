@@ -2,31 +2,36 @@
 
 namespace CWebStore.Domain.Commands.CategoryCommands.Request;
 
-public class UpdateCategoryRequestCommand : ICommand
+public class UpdateCategoryRequestCommand : Command
 {
-    public UpdateCategoryRequestCommand(){}
+    public UpdateCategoryRequestCommand() { }
 
-    public UpdateCategoryRequestCommand(Guid categoryId)
+    public UpdateCategoryRequestCommand(Guid id)
     {
-        CategoryId = categoryId;
+        Validate(id);
+        if (IsValid)
+            CategoryId = id;
     }
 
-    public UpdateCategoryRequestCommand(Guid id, string name)
+    public UpdateCategoryRequestCommand(string name)
     {
-        CategoryId = id;
         Name = name;
     }
 
     [Display(Name = "Category Id")] public Guid CategoryId { get; set; }
     
-    [Display(Name = "Name")]
-    [Required(ErrorMessage = "Name is required.")]
+    [Display(Name = "Category name")]
+    [Required(ErrorMessage = "Category name is required.")]
     [MinLength(2, ErrorMessage = "Category name must have two or more characters.")]
     [MaxLength(80, ErrorMessage = "Category name must have 80 or less characters.")]
     public string Name { get; set; }
-
-    public static implicit operator UpdateCategoryRequestCommand(Guid id) => new(id);
     
-    public static implicit operator UpdateCategoryRequestCommand(Category category) => 
-        new(category.Id, category.CategoryName.Name);
+    public void Validate(Guid id) => AddNotifications(new Contract<UpdateCategoryRequestCommand>()
+        .IsNotEmpty(id.ToString(), "UpdateCategoryRequestCommand.CategoryId", 
+            "This is not a valid category id."));
+
+    public static implicit operator UpdateCategoryRequestCommand(Guid id) => new (id);
+    
+    public static implicit operator Guid(UpdateCategoryRequestCommand command) => 
+        new (command.CategoryId.ToString());
 }

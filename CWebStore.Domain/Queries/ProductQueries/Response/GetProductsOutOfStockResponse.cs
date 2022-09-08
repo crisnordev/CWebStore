@@ -4,17 +4,21 @@ using CWebStore.Domain.ViewModels.ProductViewModels;
 
 namespace CWebStore.Domain.Queries.ProductQueries.Response;
 
-public class GetProductsOutOfStockResponseQuery : Result, IValidatable
+public class GetProductsOutOfStockResponse : Result, IValidatable
 {
-    public GetProductsOutOfStockResponseQuery()
+    private readonly IProductQueries _productQueries;
+    
+    public GetProductsOutOfStockResponse()
     {
         Products = new List<ProductViewModel>();
     }
     
-    public GetProductsOutOfStockResponseQuery(IProductQueries productQueries)
+    public GetProductsOutOfStockResponse(IProductQueries productQueries)
     {
+        _productQueries = productQueries;
+        
         Products = new List<ProductViewModel>();
-        var products = productQueries.GetProductsOutStock().Result;
+        var products = _productQueries.GetProductsOutStock().Result;
         Validate(products);
         if (!IsValid) return;
         
@@ -27,7 +31,7 @@ public class GetProductsOutOfStockResponseQuery : Result, IValidatable
     public IList<ProductViewModel> Products { get; set; }
 
     public void Validate(IEnumerable<Product> products) => 
-        AddNotifications(new Contract<GetProductsOutOfStockResponseQuery>()
+        AddNotifications(new Contract<GetProductsOutOfStockResponse>()
             .IsGreaterThan(0, products.Count(), "GetProductsOutOfStockResponseQuery.Products",
                 "Products must have stock quantity lower or equals 0."));
 }

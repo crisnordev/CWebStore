@@ -1,7 +1,6 @@
 ﻿using CWebStore.Domain.Entities;
 using CWebStore.Domain.Repositories.Interfaces;
 using CWebStore.Infra.Data;
-using CWebStore.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace CWebStore.Infra.Repositories;
@@ -18,11 +17,21 @@ public class ProductRepository : IProductRepository
     public async Task<bool> ProductExists(string productName) => 
         _context.Products.AsNoTracking().Select(x => x.ProductName.Name).All(x => x != productName);
 
-    public async Task<IEnumerable<Product>> GetAllProducts() =>
-        await _context.Products.ToListAsync();
-
     public async Task<Product> GetProductById(Guid id) =>
         await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+
+    public async Task<Category> GetCategoryById(Guid id) =>
+        await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
+    
+    public async Task<Product> GetProductWithCategories(Guid id)
+    {
+        var product = await _context.Products.Include(x => x.Categories)
+            .FirstOrDefaultAsync(x => x.Id == id);
+        if (product != null) return product;
+        product.AddNotification("ProductRepository.GetProductCategories", "Can not find product.");
+        
+        return product;
+    }
 
     public async Task<Product> PostProduct(Product product)
     {
@@ -34,7 +43,7 @@ public class ProductRepository : IProductRepository
 
     public async void UpdateProduct(Product product)
     {
-        _context.Entry(product).State = EntityState.Modified;
+        _context.Products.Update(product);
         await _context.SaveChangesAsync();
     }
 

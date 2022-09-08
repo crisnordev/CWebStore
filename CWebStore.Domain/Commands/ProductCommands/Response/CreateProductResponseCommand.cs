@@ -6,11 +6,15 @@ namespace CWebStore.Domain.Commands.ProductCommands.Response;
 
 public class CreateProductResponseCommand : Result
 {
+    private readonly IProductRepository _productRepository;
+    
     public CreateProductResponseCommand() { }
 
     public CreateProductResponseCommand(IProductRepository productRepository, CreateProductRequestCommand command)
     {
-        var exists = productRepository.ProductExists(command.ProductName).Result;
+        _productRepository = productRepository;
+        
+        var exists = _productRepository.ProductExists(command.ProductName).Result;
         Validate(exists);
         if (!IsValid) return;
 
@@ -25,7 +29,7 @@ public class CreateProductResponseCommand : Result
             product.EditProductUrl(command.ImageUrl);
         }
         
-        Product = productRepository.PostProduct(product).Result;
+        Product = _productRepository.PostProduct(product).Result;
         Success = true;
         Message = "Product created.";
     }

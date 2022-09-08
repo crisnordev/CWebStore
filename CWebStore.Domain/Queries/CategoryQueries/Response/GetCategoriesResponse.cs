@@ -3,17 +3,20 @@ using CWebStore.Domain.ViewModels.CategoryViewModels;
 
 namespace CWebStore.Domain.Queries.CategoryQueries.Response;
 
-public class GetCategoriesResponseQuery : Result
+public class GetCategoriesResponse : Result
 {
-    public GetCategoriesResponseQuery()
+    private readonly ICategoryQueries _categoryQueries;
+    public GetCategoriesResponse()
     {
         Categories = new List<CategoryViewModel>();
     }
 
-    public GetCategoriesResponseQuery(ICategoryQueries categoryQueries)
+    public GetCategoriesResponse(ICategoryQueries categoryQueries)
     {
+        _categoryQueries = categoryQueries;
+        
         Categories = new List<CategoryViewModel>();
-        var categories = categoryQueries.GetCategories().Result;
+        var categories = _categoryQueries.GetCategories().Result;
         Validate(categories);
         if (!IsValid) return;
         
@@ -25,7 +28,7 @@ public class GetCategoriesResponseQuery : Result
 
     public IList<CategoryViewModel> Categories { get; set; }
     
-    public void Validate(IEnumerable<Category> categories) => AddNotifications(new Contract<GetCategoriesResponseQuery>()
-        .AreEquals(0, categories.Count(), "GetCategoriesResponseQuery.Categories",
-            "Can not find any category."));
+    public void Validate(IEnumerable<Category> categories) => AddNotifications(
+        new Contract<GetCategoriesResponse>().AreEquals(0, categories.Count(), 
+            "GetCategoriesResponseQuery.Categories", "Can not find any category."));
 }

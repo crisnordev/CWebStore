@@ -20,6 +20,7 @@ public class CategoryCommandsHandler : Notifiable<Notification>,
 
     public IResult Handle(UpdateCategoryRequestCommand command) =>
         new UpdateCategoryResponseCommand(_repository, command);
+    
     public IResult Handle(DeleteCategoryRequestCommand command) =>
         new DeleteCategoryResponseCommand(_repository, command);
 }

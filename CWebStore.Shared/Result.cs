@@ -1,6 +1,6 @@
 ﻿namespace CWebStore.Shared;
 
-public class Result : Notifiable<Notification>, IResult
+public abstract class Result : Notifiable<Notification>, IResult
 {
     public Result() { }
 

@@ -4,15 +4,17 @@ using CWebStore.Domain.ViewModels.ProductViewModels;
 
 namespace CWebStore.Domain.Queries.ProductQueries.Response;
 
-public class GetProductByNameResponseQuery : Result
+public class GetProductByNameResponse : Result
 {
-    public GetProductByNameResponseQuery()
-    {
-    }
+    private readonly IProductQueries _productQueries;
+    
+    public GetProductByNameResponse(){ }
 
-    public GetProductByNameResponseQuery(IProductQueries productQueries, string name)
+    public GetProductByNameResponse(IProductQueries productQueries, string name)
     {
-        Product = productQueries.GetProductByName(name).Result;
+        _productQueries = productQueries;
+        
+        Product = _productQueries.GetProductByName(name).Result;
         Validate();
         if (!IsValid) return;
 
@@ -23,7 +25,7 @@ public class GetProductByNameResponseQuery : Result
     public ProductViewModel Product { get; set; }
 
     public void Validate() =>
-        AddNotifications(new Contract<GetProductByNameResponseQuery>()
+        AddNotifications(new Contract<GetProductByNameResponse>()
             .IsNotNullOrEmpty(Product.Name, "GetProductByNameResponseQuery.Products"
                 , "Can not find product."));
 }

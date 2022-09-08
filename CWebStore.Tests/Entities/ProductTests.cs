@@ -9,29 +9,38 @@ public class ProductTests
 
     public ProductTests()
     {
-        _product = new Product(new ProductName("Product name"), new Price(1, 10), new Quantity(1), 
-            new Description("Product description"), new Manufacturer("Manufacturer"), 
-            new FileName("fileName.png"), new UrlString("https://docs.microsoft.com"));
+        _product = new Product("Product name", 1, 1);
+        _product.EditProductBuyValue(1.2m);
+        _product.EditProductPercentage(20);
+        _product.EditProductDescription("Product description");
+        _product.EditProductManufacturer("Manufacturer");
+        _product.EditProductFileName("fileName.png");
+        _product.EditProductUrl("https://docs.microsoft.com");
 
-        _category = new Category(new CategoryName("Category"));
+        _category = new Category("Category");
     }
 
     [TestMethod]
     [TestCategory("CWebStore.Domain.Entities")]
     public void Given_product_with_invalid_name_should_return_error_message()
     {
-        var product = new Product(new ProductName(string.Empty), new Price(1), new Quantity(1), 
-            new Description("Product description"), new Manufacturer("Manufacturer"), 
-            new FileName("fileName.png"), new UrlString("https://docs.microsoft.com"));
-        var message = "Product name must not be null or empty.";
-        Assert.AreEqual(message, product.Notifications.FirstOrDefault().Message);
+        var product = new Product(string.Empty, 1, 1); 
+        product.EditProductBuyValue(1.2m);
+        product.EditProductPercentage(20);
+        product.EditProductDescription("Product description");
+        product.EditProductManufacturer("Manufacturer");
+        product.EditProductFileName("fileName.png");
+        product.EditProductUrl("https://docs.microsoft.com");
+        
+        Assert.AreEqual("Product name must not be null or empty.", 
+            product.Notifications.FirstOrDefault().Message);
     }
     
     [TestMethod]
     [TestCategory("CWebStore.Domain.Entities")]
     public void Given_valid_product_AddCategory_with_invalid_category_should_return_error_message()
     {
-        _product.AddCategory(new Category(new CategoryName(string.Empty)));
+        _product.AddCategory(new Category(string.Empty));
         var message = "Can not add this category.";
         Assert.AreEqual(message, _product.Notifications.FirstOrDefault().Message);
     }

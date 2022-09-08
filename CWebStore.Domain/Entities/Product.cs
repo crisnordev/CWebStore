@@ -4,10 +4,7 @@ public class Product : Entity, IValidatable
 {
     private IList<Category> _categories;
 
-    protected Product()
-    {
-        _categories = new List<Category>();
-    }
+    protected Product() { }
 
     public Product(string productName, decimal sellPrice, int stockQuantity)
     {
@@ -17,6 +14,7 @@ public class Product : Entity, IValidatable
         var price = new Price(sellPrice);
         var quantity = new Quantity(stockQuantity);
         Validate(name, price, quantity);
+        if (!IsValid) return;
 
         ProductName = name;
         Price = price;
@@ -42,102 +40,80 @@ public class Product : Entity, IValidatable
     public void Validate(ProductName productName, Price sellPrice, Quantity stockQuantity) =>
         AddNotifications(productName, sellPrice, stockQuantity);
 
-    public void Validate(Category category) =>
-        AddNotifications(category);
-
     public void AddCategory(Category category)
     {
-        Validate(category);
-
-        if (!IsValid)
-            AddNotification("Product.AddCategory", "This is not a valid category.");
-
+        AddNotifications(new Contract<Product>()
+            .IsFalse(Categories.All(x => x != category), "Product.AddCategory", 
+                "This product already has this category.").Join(category));
+        if (!IsValid) return;
+        
         _categories.Add(category);
     }
 
-    public void RemoveCategory(Guid id)
+    public void RemoveCategory(Guid categoryId)
     {
-        var category = _categories.FirstOrDefault(x => x.Id == id);
+        var category = Categories.FirstOrDefault(x => x.Id == categoryId);
         AddNotifications(new Contract<Product>()
-            .IsNotEmpty(id, "Product.RemoveCategory", "This id can not be null or empty.")
-            .AreEquals(category.Id, id, "Product.RemoveCategory", 
-                "Can not find this category."));
-        if (!IsValid) return;
+            .IsNullOrEmpty(category.CategoryName.ToString(), "Product.RemoveCategory", 
+                "This product does not have this category in list."));
         
-        _categories.Remove(_categories.First(x => x.Id == id));
+        if (IsValid)
+            _categories.Remove(category);
     }
 
     public void EditProductName(string name)
     {
         ProductName.EditProductName(name);
-        
-        if (!ProductName.IsValid)
-            AddNotifications(ProductName);
+        AddNotifications(ProductName);
     }
     
     public void EditProductSellValue(decimal sellValue)
     {
         Price.EditSellValue(sellValue);
-        
-        if (!Price.IsValid)
-            AddNotifications(Price);
+        AddNotifications(Price);
     }
     
     public void EditProductBuyValue(decimal buyValue)
     {
         Price.EditBuyValue(buyValue);
-        
-        if (!Price.IsValid)
-            AddNotifications(Price);
+        AddNotifications(Price);
     }
     
     public void EditProductPercentage(decimal percentage)
     {
         Price.EditPercentage(percentage);
-        
-        if (!Price.IsValid)
-            AddNotifications(Price);
+        AddNotifications(Price);
     }
     
     
     public void EditProductStockQuantity(int quantity)
     {
         StockQuantity.EditQuantityValue(quantity);
-        
-        if (!StockQuantity.IsValid)
-            AddNotifications(StockQuantity);
+        AddNotifications(StockQuantity);
     }
 
     public void EditProductDescription(string description)
     {
         Description.EditDescriptionText(description);
-        
-        if (!Description.IsValid)
-            AddNotifications(Description);
+        AddNotifications(Description);
 
     }
 
     public void EditProductManufacturer(string manufacturer)
     {
         Manufacturer.EditManufacturerName(manufacturer);
-        
-        if (!Manufacturer.IsValid)
-            AddNotifications(Manufacturer);
+        AddNotifications(Manufacturer);
     }
 
     public void EditProductFileName(string fileName)
     {
         ImageFileName.EditFileName(fileName);
-        
-        if (!ImageFileName.IsValid)
-            AddNotifications(ImageFileName);
+        AddNotifications(ImageFileName);
     }
 
     public void EditProductUrl(string url)
     {
         ImageUrl.EditUrlPropertyString(url);
-        
-        if (!ImageUrl.IsValid)
-            AddNotifications(ImageUrl);
+        AddNotifications(ImageUrl);
     }
 }

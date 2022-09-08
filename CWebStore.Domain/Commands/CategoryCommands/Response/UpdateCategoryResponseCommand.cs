@@ -5,11 +5,15 @@ namespace CWebStore.Domain.Commands.CategoryCommands.Response;
 
 public class UpdateCategoryResponseCommand : Result
 {
+    private readonly ICategoryRepository _categoryRepository;
+    
     public UpdateCategoryResponseCommand() { }
     
     public UpdateCategoryResponseCommand(ICategoryRepository categoryRepository, UpdateCategoryRequestCommand command)
     {
-        var category = categoryRepository.GetCategoryById(command.CategoryId).Result;
+        _categoryRepository = categoryRepository;
+        
+        var category = _categoryRepository.GetCategoryById(command).Result;
         Validate(command.Name);
         if (!IsValid) return;
 
@@ -17,7 +21,7 @@ public class UpdateCategoryResponseCommand : Result
         AddNotifications(category);
         if (!IsValid) return;
         
-        categoryRepository.UpdateCategory(category);
+        _categoryRepository.UpdateCategory(category);
         CategoryName = command.Name;
         Success = true;
         Message = "Category deleted.";

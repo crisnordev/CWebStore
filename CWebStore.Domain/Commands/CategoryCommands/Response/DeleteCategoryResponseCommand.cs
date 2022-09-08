@@ -5,16 +5,20 @@ namespace CWebStore.Domain.Commands.CategoryCommands.Response;
 
 public class DeleteCategoryResponseCommand : Result
 {
+    private readonly ICategoryRepository _categoryRepository;
+    
     public DeleteCategoryResponseCommand() { }
 
     public DeleteCategoryResponseCommand(ICategoryRepository categoryRepository, DeleteCategoryRequestCommand command)
     {
-        var category = categoryRepository.GetCategoryById(command.Id).Result;
+        _categoryRepository = categoryRepository;
+        
+        var category = _categoryRepository.GetCategoryById(command).Result;
         var categoryName = category.CategoryName.Name;
         Validate(categoryName);
         if (!IsValid) return;
 
-        categoryRepository.DeleteCategory(category);
+        _categoryRepository.DeleteCategory(category);
         CategoryName = categoryName;
         Success = true;
         Message = "Category deleted.";

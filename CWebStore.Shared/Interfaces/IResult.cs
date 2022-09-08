@@ -1,3 +1,3 @@
 namespace CWebStore.Shared.Interfaces;
 
-public interface IResult { }
+public interface IResult : IValidatable { }

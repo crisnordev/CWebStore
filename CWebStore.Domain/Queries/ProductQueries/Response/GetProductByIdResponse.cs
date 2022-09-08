@@ -1,16 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
-using CWebStore.Domain.Queries.ProductQueries.Interfaces;
+﻿using CWebStore.Domain.Queries.ProductQueries.Interfaces;
 using CWebStore.Domain.ViewModels.ProductViewModels;
 
 namespace CWebStore.Domain.Queries.ProductQueries.Response;
 
-public class GetProductByIdResponseQuery : Result
+public class GetProductByIdResponse : Result
 {
-    public GetProductByIdResponseQuery() { }
+    private readonly IProductQueries _productQueries;
+    
+    public GetProductByIdResponse() { }
 
-    public GetProductByIdResponseQuery(IProductQueries productQueries, Guid id)
+    public GetProductByIdResponse(IProductQueries productQueries, Guid id)
     {
-        Product = productQueries.GetProductById(id).Result;
+        _productQueries = productQueries;
+        
+        Product = _productQueries.GetProductById(id).Result;
         Validate();
         if (!IsValid) 
             Success = false;
@@ -24,7 +27,7 @@ public class GetProductByIdResponseQuery : Result
 
     public void Validate()
     {
-        AddNotifications(new Contract<GetProductByIdResponseQuery>()
+        AddNotifications(new Contract<GetProductByIdResponse>()
             .IsNotNullOrEmpty(Product.Name, "GetProductByIdResponseQuery.Products"
                 , "Can not find Product."));
     }

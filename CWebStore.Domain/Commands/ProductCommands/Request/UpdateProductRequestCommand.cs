@@ -7,6 +7,28 @@ public class UpdateProductRequestCommand : Notifiable<Notification>, ICommand
 {
     public UpdateProductRequestCommand() { }
 
+    public UpdateProductRequestCommand(Guid id)
+    {
+        Validate(id);
+        if (IsValid)
+            ProductId = id;
+    }
+
+    public UpdateProductRequestCommand(Guid id, string productName, string productDescription, string manufacturerName, decimal sellValue, decimal buyValue, decimal percentage, int stockQuantity, string imageFileName, string imageUrl)
+    {
+        if (IsValid)
+            ProductId = id;
+        ProductName = productName;
+        ProductDescription = productDescription;
+        ManufacturerName = manufacturerName;
+        SellValue = sellValue;
+        BuyValue = buyValue;
+        Percentage = percentage;
+        StockQuantity = stockQuantity;
+        ImageFileName = imageFileName;
+        ImageUrl = imageUrl;
+    }
+
     [Display(Name = "Product Id")] public Guid ProductId { get; set; }
     
     [Display(Name = "Name")]
@@ -64,4 +86,12 @@ public class UpdateProductRequestCommand : Notifiable<Notification>, ICommand
     [MaxLength(120, ErrorMessage = "Image Url must have 120 or less characters.")]
     [Url(ErrorMessage = "This is no a valid Url.")]
     public string ImageUrl { get; set; }
+    
+    public void Validate(Guid id) => AddNotifications(new Contract<UpdateProductRequestCommand>()
+        .IsNotEmpty(id.ToString(), "UpdateCategoryRequestCommand.CategoryId", 
+            "This is not a valid category id."));
+    
+    public static implicit operator UpdateProductRequestCommand(Guid id) => new(id);
+    
+    public static implicit operator Guid(UpdateProductRequestCommand id) => new(id.ProductId.ToString());
 }

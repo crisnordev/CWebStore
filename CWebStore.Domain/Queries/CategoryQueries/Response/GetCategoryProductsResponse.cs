@@ -4,21 +4,25 @@ using CWebStore.Domain.ViewModels.ProductViewModels;
 
 namespace CWebStore.Domain.Queries.CategoryQueries.Response;
 
-public class GetCategoryProductsResponseQuery : Result
+public class GetCategoryProductsResponse : Result
 {
-    public GetCategoryProductsResponseQuery()
+    private readonly ICategoryQueries _categoryQueries;
+    
+    public GetCategoryProductsResponse()
     {
         Products = new List<ProductViewModel>();
     }
 
-    public GetCategoryProductsResponseQuery(ICategoryQueries categoryQueries, Guid id)
+    public GetCategoryProductsResponse(ICategoryQueries categoryQueries, Guid id)
     {
+        _categoryQueries = categoryQueries;
+        
         Products = new List<ProductViewModel>();
-        var category = categoryQueries.GetCategoryProducts(id).Result;
-        Validate(category.CategoryName.Name);
+        var category = _categoryQueries.GetCategoryProducts(id).Result;
+        Validate(category.CategoryName.ToString());
         if (!IsValid) return;
         
-        CategoryName = category.CategoryName.Name;
+        CategoryName = category.CategoryName.ToString();
         
         Validate(category.Products);
         if (!IsValid) return;
@@ -34,12 +38,12 @@ public class GetCategoryProductsResponseQuery : Result
     [Display(Name = "Products")] public IEnumerable<ProductViewModel> Products { get; set; }
     
     public void Validate(string name) =>
-        AddNotifications(new Contract<GetCategoryProductsResponseQuery>()
+        AddNotifications(new Contract<GetCategoryProductsResponse>()
             .IsNotNullOrEmpty(name, "GetCategoryProductsResponseQuery.CategoryName"
                 , "Can not find category."));
     
     public void Validate(IEnumerable<Product> products) => 
-        AddNotifications(new Contract<GetCategoryProductsResponseQuery>()
+        AddNotifications(new Contract<GetCategoryProductsResponse>()
         .AreEquals(0, products.Count(), "GetCategoryProductsResponseQuery.Products",
             "Can not find any product."));
 }

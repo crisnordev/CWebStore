@@ -2,7 +2,7 @@
 
 namespace CWebStore.Domain.Commands.CategoryCommands.Request;
 
-public class CreateCategoryRequestCommand : ICommand
+public class CreateCategoryRequestCommand : Command
 {
     public CreateCategoryRequestCommand() { }
 

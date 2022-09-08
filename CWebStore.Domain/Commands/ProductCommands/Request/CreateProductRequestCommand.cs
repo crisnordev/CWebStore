@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CWebStore.Domain.Commands.ProductCommands.Request;
 
-public class CreateProductRequestCommand : Notifiable<Notification>, ICommand
+public class CreateProductRequestCommand : Command
 {
     public CreateProductRequestCommand() { }
 

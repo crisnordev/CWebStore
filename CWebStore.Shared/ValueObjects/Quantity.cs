@@ -6,24 +6,24 @@ public class Quantity : ValueObject, IValidatable
 
     public Quantity(int value)
     {
-        QuantityValue = value;
+        AvailableStock = value;
         Validate();
     }
 
-    public int QuantityValue { get; private set; }
+    public int AvailableStock { get; private set; }
     
     public void Validate()
     {
         AddNotifications(new Contract<decimal>()
-            .IsLowerThan(0, QuantityValue, "Price.Value", 
-                "Quantity must not be lower than 0.")
-            .IsGreaterThan(1000000, QuantityValue, "Price.Value", 
-                "Quantity must not be greater than 1000000"));
+            .IsLowerThan(0, AvailableStock, "Price.Value", 
+                "Available stock must not be lower than 0.")
+            .IsGreaterThan(1000000, AvailableStock, "Price.Value", 
+                "Available stock must not be greater than 1000000"));
     }
 
     public void EditQuantityValue(int quantity)
     {
-        QuantityValue = quantity;
+        AvailableStock = quantity;
         Validate();
     }
 }

@@ -4,68 +4,68 @@ public class Price : ValueObject, IValidatable
 {
     protected Price() { }
 
-    public Price(decimal sellValue)
+    public Price(decimal value)
     {
-        SellValue = sellValue;
+        Value = value;
         
         Validate();
     }
 
-    public Price(decimal buyValue, decimal percentage)
+    public Price(decimal cost, decimal percentage)
     {
-        BuyValue = buyValue;
+        Cost = cost;
         Percentage = percentage;
         
         Validate();
         if (IsValid && Percentage > 0)
-            SellValue = BuyValue + BuyValue * Percentage / 100;
+            Value = Cost + Cost * Percentage / 100;
 
         else
-            SellValue = BuyValue;
+            Value = Cost;
     }
     
-    public decimal SellValue { get; private set; }
+    public decimal Value { get; private set; }
 
-    public decimal BuyValue { get; private set; }
+    public decimal Cost { get; private set; }
 
     public decimal Percentage { get; private set; }
 
     public void Validate()
     {
         AddNotifications(new Contract<decimal>()
-            .IsGreaterOrEqualsThan(SellValue,0,  "Price.SellValue", 
-                "Sell value must not be lower than 0.")
-            .IsGreaterOrEqualsThan(BuyValue, 0, "Price.BuyValue",
-                "Buy value must not be lower than 0.")
+            .IsGreaterOrEqualsThan(Value,0,  "Price.Value", 
+                "Value must not be lower than 0.")
+            .IsGreaterOrEqualsThan(Cost, 0, "Price.Cost",
+                "Cost must not be lower than 0.")
             .IsGreaterOrEqualsThan(Percentage, 0, "Price.Percentage",
                 "Percentage must not be lower than 0."));
     }
 
     public void EditSellValue(decimal sellValue)
     {
-        SellValue = sellValue;
+        Value = sellValue;
         Validate();
         
-        if (IsValid && SellValue > BuyValue && BuyValue > 0)
-            Percentage = (SellValue - BuyValue) * 100 / BuyValue;
+        if (IsValid && Value > Cost && Cost > 0)
+            Percentage = (Value - Cost) * 100 / Cost;
         
         else
         {
             Percentage = 0;
-            BuyValue = 0;
+            Cost = 0;
         }
     }
 
     public void EditBuyValue(decimal buyValue)
     {
-        BuyValue = buyValue;
+        Cost = buyValue;
         Validate();
 
         if (IsValid && Percentage > 0)
-            SellValue = BuyValue + BuyValue * Percentage / 100;
+            Value = Cost + Cost * Percentage / 100;
 
         else
-            SellValue = 0;
+            Value = 0;
     }
 
     public void EditPercentage(decimal percentage)
@@ -73,10 +73,10 @@ public class Price : ValueObject, IValidatable
         Percentage = percentage;
         Validate();
         
-        if (IsValid && BuyValue > 0 && Percentage > 0)
-            SellValue = BuyValue + BuyValue * Percentage / 100;
+        if (IsValid && Cost > 0 && Percentage > 0)
+            Value = Cost + Cost * Percentage / 100;
 
         else
-            SellValue = 0;
+            Value = 0;
     }
 }

@@ -2,38 +2,54 @@
 
 public class Product : Entity, IValidatable
 {
-    private IList<Category> _categories;
-
     protected Product() { }
 
     public Product(ProductName productName, Price price, Quantity stockQuantity)
     {
-        ProductName = productName;
+        Name = productName;
         Price = price;
         StockQuantity = stockQuantity;
-        _categories = new List<Category>();
         Validate();
     }
 
     public Product(ProductName productName, Price price, Quantity stockQuantity, Description description,
         Manufacturer manufacturer, FileName imageFileName, UrlString imageUrl)
     {
-        ProductName = productName;
+        Name = productName;
         Price = price;
         StockQuantity = stockQuantity;
         Description = description;
         Manufacturer = manufacturer;
         ImageFileName = imageFileName;
         ImageUrl = imageUrl;
-        _categories = new List<Category>();
         Validate();
     }
 
-    public ProductName ProductName { get; private set; }
+    public ProductName Name { get; private set; }
 
     public Price Price { get; private set; }
 
+    public string Code { get; set; }
+
+    public string BarCode { get; set; }
+
     public Quantity StockQuantity { get; private set; }
+
+    public string NcmCode { get; set; }
+
+    public string CestCode { get; set; }
+
+    public decimal NetWeight { get; set; }
+
+    public decimal GrossWeight { get; set; }
+
+    public Guid CategoryId { get; set; }
+
+    public Category Category { get; set; }
+
+    public string UnitMeasure { get; set; }
+
+    public IList<Guid> SuppliersId { get; set; }
 
     public Description Description { get; private set; }
 
@@ -43,48 +59,27 @@ public class Product : Entity, IValidatable
 
     public UrlString ImageUrl { get; private set; }
 
-    public IReadOnlyCollection<Category> Categories => _categories.ToArray();
-
     public void Validate()
     {
-        AddNotifications(ProductName, Description, Manufacturer, StockQuantity, Price,
-            ImageFileName, ImageUrl);
-
-        foreach (var category in Categories)
-            AddNotifications(category);
+        AddNotifications(Name, Price, Description, Manufacturer, StockQuantity, Category, ImageFileName, ImageUrl);
     }
 
-    public void AddCategory(Category category)
+    public void EditCategory(Category category)
     {
         category.Validate();
 
         if (!category.IsValid)
-            AddNotification("Product.AddCategory", "Can not add this category.");
+            AddNotification("Product.EditCategory", "Can not add this category.");
 
-        if (_categories.Any(x => x.Id == category.Id))
-            AddNotification("Product.Categories", "This category has already been added.");
-
-        _categories.Add(category);
-    }
-
-    public void RemoveCategory(Guid id)
-    {
-        if (id == null || id == Guid.Empty)
-            AddNotification("Product.Categories", "This id can not be null or empty.");
-        
-        else if (_categories.All(x => x.Id != id))
-            AddNotification("Product.Categories", "Can not find this category.");
-
-        else
-            _categories.Remove(_categories.First(x => x.Id == id));
+        Category = category;
     }
 
     public void EditProductName(string name)
     {
-        ProductName.EditProductName(name);
+        Name.EditProductName(name);
         
-        if (!ProductName.IsValid)
-            AddNotifications(ProductName);
+        if (!Name.IsValid)
+            AddNotifications(Name);
     }
     
     public void EditProductSellValue(decimal sellValue)

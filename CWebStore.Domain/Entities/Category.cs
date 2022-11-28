@@ -5,20 +5,20 @@ public class Category : Entity, IValidatable
     private IList<Product> _products;
     protected Category() { }
 
-    public Category(CategoryName name)
+    public Category(string name)
     {
-        CategoryName = name;
+        Name = new CategoryName(name);
         _products = new List<Product>();
         Validate();
     }
 
-    public CategoryName CategoryName { get; private set; }
+    public CategoryName Name { get; private set; }
 
     public IReadOnlyCollection<Product> Products => _products.ToArray();
 
     public void Validate()
     {
-        AddNotifications(CategoryName);
+        AddNotifications(Name);
 
         foreach (var product in Products)
             AddNotifications(product);
@@ -26,9 +26,9 @@ public class Category : Entity, IValidatable
     
     public void EditCategoryName(string name)
     {
-        CategoryName.EditCategoryName(name);
+        Name.EditCategoryName(name);
         
-        if (!CategoryName.IsValid)
-            AddNotifications(CategoryName);
+        if (!Name.IsValid)
+            AddNotifications(Name);
     }
 }

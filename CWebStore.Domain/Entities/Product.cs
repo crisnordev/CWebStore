@@ -48,9 +48,7 @@ public class Product : Entity, IValidatable
     public Category Category { get; set; }
 
     public string UnitMeasure { get; set; }
-
-    public IList<Guid> SuppliersId { get; set; }
-
+    
     public Description Description { get; private set; }
 
     public Manufacturer Manufacturer { get; private set; }

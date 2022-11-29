@@ -7,5 +7,5 @@ public abstract class Entity : Notifiable<Notification>
         Id = Guid.NewGuid();
     }
 
-    public Guid Id { get; private set; }
+    public virtual Guid Id { get; protected internal set; }
 }

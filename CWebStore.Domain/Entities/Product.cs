@@ -4,26 +4,16 @@ public class Product : Entity, IValidatable
 {
     protected Product() { }
 
-    public Product(ProductName productName, Price price, Quantity stockQuantity)
+    public Product(string id, string name, decimal value, int stockQuantity)
     {
-        Name = productName;
-        Price = price;
-        StockQuantity = stockQuantity;
+        Id = new Guid(id);
+        Name = new ProductName(name);
+        Price = new Price(value);
+        StockQuantity = new Quantity(stockQuantity);
         Validate();
     }
 
-    public Product(ProductName productName, Price price, Quantity stockQuantity, Description description,
-        Manufacturer manufacturer, FileName imageFileName, UrlString imageUrl)
-    {
-        Name = productName;
-        Price = price;
-        StockQuantity = stockQuantity;
-        Description = description;
-        Manufacturer = manufacturer;
-        ImageFileName = imageFileName;
-        ImageUrl = imageUrl;
-        Validate();
-    }
+    public sealed override Guid Id { get; protected set; }
 
     public ProductName Name { get; private set; }
 
@@ -31,13 +21,7 @@ public class Product : Entity, IValidatable
 
     public string Code { get; set; }
 
-    public string BarCode { get; set; }
-
     public Quantity StockQuantity { get; private set; }
-
-    public string NcmCode { get; set; }
-
-    public string CestCode { get; set; }
 
     public decimal NetWeight { get; set; }
 
@@ -48,10 +32,6 @@ public class Product : Entity, IValidatable
     public Category Category { get; set; }
 
     public string UnitMeasure { get; set; }
-    
-    public Description Description { get; private set; }
-
-    public Manufacturer Manufacturer { get; private set; }
 
     public FileName ImageFileName { get; private set; }
 
@@ -59,17 +39,19 @@ public class Product : Entity, IValidatable
 
     public void Validate()
     {
-        AddNotifications(Name, Price, Description, Manufacturer, StockQuantity, Category, ImageFileName, ImageUrl);
+        AddNotifications(new Contract<string>()
+            .IsNotNullOrEmpty(Id.ToString(), "Product.Id",
+                "Product Id must not be null or empty.")
+            .AreEquals(Id, Guid.Empty, "Product.Id",
+                "Product Id must not be null or empty.")
+            .Join(Name, Price, StockQuantity));
     }
 
     public void EditCategory(Category category)
     {
         category.Validate();
-
-        if (!category.IsValid)
-            AddNotification("Product.EditCategory", "Can not add this category.");
-
-        Category = category;
+        if (category.IsValid) Category = category;
+        AddNotification("Product.EditCategory", "Can not add this category.");
     }
 
     public void EditProductName(string name)
@@ -80,54 +62,28 @@ public class Product : Entity, IValidatable
             AddNotifications(Name);
     }
     
-    public void EditProductSellValue(decimal sellValue)
+    public void EditProductValue(decimal value)
     {
-        Price.EditSellValue(sellValue);
+        Price.EditValue(value);
         
         if (!Price.IsValid)
             AddNotifications(Price);
     }
     
-    public void EditProductBuyValue(decimal buyValue)
+    public void EditProductCost(decimal cost)
     {
-        Price.EditBuyValue(buyValue);
+        Price.EditCost(cost);
         
         if (!Price.IsValid)
             AddNotifications(Price);
     }
-    
-    public void EditProductPercentage(decimal percentage)
-    {
-        Price.EditPercentage(percentage);
-        
-        if (!Price.IsValid)
-            AddNotifications(Price);
-    }
-    
-    
+
     public void EditProductStockQuantity(int quantity)
     {
         StockQuantity.EditQuantityValue(quantity);
         
         if (!StockQuantity.IsValid)
             AddNotifications(StockQuantity);
-    }
-
-    public void EditProductDescription(string description)
-    {
-        Description.EditDescriptionText(description);
-        
-        if (!Description.IsValid)
-            AddNotifications(Description);
-
-    }
-
-    public void EditProductManufacturer(string manufacturer)
-    {
-        Manufacturer.EditManufacturerName(manufacturer);
-        
-        if (!Manufacturer.IsValid)
-            AddNotifications(Manufacturer);
     }
 
     public void EditProductFileName(string fileName)

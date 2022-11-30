@@ -16,7 +16,7 @@ public class UrlString : ValueObject, IValidatable
     {
         AddNotifications(new Contract<string>()
             .IsGreaterThan(2048, UrlStringProperty.Length,"UrlString.UrlStringProperty",
-                "Url must have 2048 or less characters.")
+                "Url must have a maximum 2048 characters long.")
             .IsUrlOrEmpty(UrlStringProperty, "UrlString.UrlStringProperty",
                 "This is not a valid Url.")
             .IsUrl(UrlStringProperty, "UrlString.UrlStringProperty",

@@ -1,4 +1,4 @@
-﻿using CWebStore.Domain.Enums;
+﻿using CWebStore.Shared.Enums;
 
 namespace CWebStore.Domain.Entities;
 

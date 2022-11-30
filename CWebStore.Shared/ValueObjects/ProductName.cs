@@ -19,9 +19,9 @@
                 .IsNotNullOrEmpty(name, "ProductName.Name",
                     "Product name must not be null or empty.")
                 .IsLowerThan(2, name.Length, "ProductName.Name",
-                    "Product name must have two or more characters.")
+                    "Product name must have between 2 and 120 characters long.")
                 .IsGreaterThan(120, name.Length, "ProductName.Name",
-                    "Product name must have 120 or less characters."));
+                    "Product name must have between 2 and 120 characters long."));
         }
 
         public void EditProductName(string name)

@@ -6,27 +6,27 @@ public class CategoryName : ValueObject, IValidatable
     
     public CategoryName(string name)
     {
-        Name = name;
-        Validate();
+        Validate(name);
+        if (IsValid) Name = name;
     }
 
     public string Name { get; private set; }
 
-    public void Validate()
+    public void Validate(string name)
     {
         AddNotifications(new Contract<Notification>()
-            .IsNotNullOrEmpty(Name, "CategoryName.Name",
+            .IsNotNullOrEmpty(name, "CategoryName.Name",
                 "Category name must not be null or empty.")
-            .IsLowerThan(2, Name.Length, "CategoryName.Name",
-                "Category name must have two or more characters.")
-            .IsGreaterOrEqualsThan(80, Name.Length, "CategoryName.Name",
-                "Category name must have 80 or less characters."));
+            .IsLowerThan(2, name.Length, "CategoryName.Name",
+                "Category name must have between 2 and 60 characters long.")
+            .IsGreaterOrEqualsThan(60, name.Length, "CategoryName.Name",
+                "Category name must have between 2 and 60 characters long."));
     }
 
     public void EditCategoryName(string name)
     {
-        Name = name;
-        Validate();
+        Validate(name);
+        if (IsValid) Name = name;
     }
 
     public override string ToString() => Name;

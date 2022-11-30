@@ -1,4 +1,4 @@
-﻿namespace CWebStore.Domain.Enums;
+﻿namespace CWebStore.Shared.Enums;
 
 public enum EPersonType
 {

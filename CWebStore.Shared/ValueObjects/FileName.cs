@@ -18,9 +18,9 @@ public class FileName : ValueObject, IValidatable
             .IsNotNullOrEmpty(Name, "FileName.Name",
                 "File name must not be null or empty.")
             .IsLowerThan(6, Name.Length, "FileName.Name",
-                "File name must have two or more characters.")
+                "File name must have between 2 and 60 characters long.")
             .IsGreaterThan(60, Name.Length, "FileName.Name",
-                "File name must have 60 or less characters."));
+                "File name must have between 2 and 60 characters long."));
         
         if(!Name.EndsWith(".png") && IsValid)
             AddNotification("FileName.Name", "File must be a .png file");

@@ -1,8 +1,14 @@
-﻿namespace CWebStore.Domain.Entities;
+﻿using Microsoft.AspNetCore.Identity;
 
-public class Seller : Entity, IValidatable
+namespace CWebStore.Domain.Entities;
+
+public class Seller : Entity
 {
-    public Guid SellerId { get; set; }
+    public Seller(string id, string name) : base(id)
+    {
+        Name = name;
+    }
 
+    [ProtectedPersonalData]
     public string Name { get; set; }
 }

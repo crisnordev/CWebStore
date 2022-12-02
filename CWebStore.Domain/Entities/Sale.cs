@@ -4,8 +4,6 @@ namespace CWebStore.Domain.Entities;
 
 public class Sale : Entity, IValidatable
 {
-    public Guid SaleId { get; set; }
-
     public string Number { get; set; }
 
     public DateTime Emission { get; set; }
@@ -22,7 +20,7 @@ public class Sale : Entity, IValidatable
     
     public IList<Product> Products { get; set; }
 
-    public Discount Discount { get; set; }
+    public DiscountValueObject Discount { get; set; }
 
     public Payment Payment { get; set; }
     

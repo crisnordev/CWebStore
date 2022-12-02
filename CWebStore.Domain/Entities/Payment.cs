@@ -1,16 +1,49 @@
-﻿using CWebStore.Domain.Enums;
+﻿using CWebStore.Shared.Enums;
 
 namespace CWebStore.Domain.Entities;
 
-public class Payment : Entity, IValidatable
+public class Payment : Entity
 {
-    public Guid PaymentId { get; set; }
+    private readonly IList<InstallmentsValueObject> _installments;
+    
+    protected Payment()
+    {
+    }
 
-    public EPaymentType Type { get; set; }
+    public Payment(string id, EPaymentType type, EPaymentMethod paymentMethod, IList<InstallmentsValueObject> installments) : base(id)
+    {
+        AddInstalments(installments);
+        if (!IsValid) return;
+        Type = type;
+        PaymentMethod = paymentMethod;
+    }
+    
+    public EPaymentType Type { get; private set; }
 
-    public EPaymentMethod PaymentMethod { get; set; }
+    public EPaymentMethod PaymentMethod { get; private set; }
 
-    public Installments Installments { get; set; }
+    public IReadOnlyCollection<InstallmentsValueObject> Installments => _installments.ToArray();
 
-    public string FinancialAccountId { get; set; }
+    public void Validate(IList<InstallmentsValueObject> installments)
+    {
+        if (!installments.Any())
+        {
+            AddNotification("Payment.Installments", "Installments must not be null.");
+            return;
+        }
+        foreach (var installment in installments)
+        {
+            AddNotifications(installment);
+        }
+    }
+    
+    public void AddInstalments(IList<InstallmentsValueObject> installments)
+    {
+        Validate(installments);
+        if (IsValid)
+            foreach (var installment in installments)
+            {
+                _installments.Add(installment);
+            }
+    }
 }

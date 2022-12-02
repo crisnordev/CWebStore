@@ -1,27 +1,25 @@
 ﻿namespace CWebStore.Domain.Entities;
 
-public class Category : Entity, IValidatable
+public class Category : Entity
 {
-    private IList<Product> _products;
+    private readonly IList<Product> _products;
     protected Category() { }
 
     public Category(string name)
     {
-        Name = new CategoryName(name);
+        var categoryName = new CategoryNameValueObject(name);
+        Validate(categoryName);
+        Name = categoryName;
         _products = new List<Product>();
-        Validate();
     }
 
-    public CategoryName Name { get; private set; }
+    public CategoryNameValueObject Name { get; private set; }
 
     public IReadOnlyCollection<Product> Products => _products.ToArray();
 
-    public void Validate()
+    public void Validate(CategoryNameValueObject categoryName)
     {
-        AddNotifications(Name);
-
-        foreach (var product in Products)
-            AddNotifications(product);
+        AddNotifications(categoryName);
     }
     
     public void EditCategoryName(string name)

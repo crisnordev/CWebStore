@@ -1,22 +1,21 @@
-﻿namespace CWebStore.Shared.ValueObjects;
+﻿using System.Globalization;
 
-public class Price : ValueObject, IValidatable
+namespace CWebStore.Shared.ValueObjects;
+
+public class PriceValueObject : ValueObject
 {
-    protected Price() { }
+    protected PriceValueObject() { }
 
-    public Price(decimal value)
+    public PriceValueObject(decimal value)
     {
         Validate(value);
-        if (!IsValid) return;
-
-        Value = value;
+        if (IsValid) Value = value;
     }
 
-    public Price(decimal value, decimal cost)
+    public PriceValueObject(decimal value, decimal cost)
     {
         Validate(value, cost);
         if (!IsValid) return;
-        
         Value = value;
         Cost = cost;
     }
@@ -28,30 +27,30 @@ public class Price : ValueObject, IValidatable
     public void Validate(decimal value)
     {
         AddNotifications(new Contract<decimal>()
-            .IsGreaterOrEqualsThan(value, 0, "Price.Value",
+            .IsGreaterOrEqualsThan(value, 0, "PriceValueObject.Value",
                 "Value must not be lower than 0."));
     }
     
     public void Validate(decimal value, decimal cost)
     {
         AddNotifications(new Contract<decimal>()
-            .IsGreaterOrEqualsThan(value, 0, "Price.Value",
+            .IsGreaterOrEqualsThan(value, 0, "PriceValueObject.Value",
                 "Value must not be lower than 0.")
-            .IsGreaterOrEqualsThan(cost, 0, "Price.Cost",
+            .IsGreaterOrEqualsThan(cost, 0, "PriceValueObject.Cost",
                 "Cost must not be lower than 0."));
     }
 
     public void EditValue(decimal value)
     {
         Validate(value);
-        if (!IsValid) return;
-        Value = value;
+        if (IsValid) Value = value;
     }
 
     public void EditCost(decimal cost)
     {
         Validate(cost);
-        if (!IsValid) return;
-        Cost = cost;
+        if (IsValid) Cost = cost;
     }
+    
+    public override string ToString() => Value.ToString("F2", CultureInfo.InvariantCulture);
 }

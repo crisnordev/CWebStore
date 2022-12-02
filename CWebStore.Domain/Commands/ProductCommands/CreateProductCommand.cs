@@ -83,9 +83,9 @@ public class CreateProductCommand : Notifiable<Notification>, ICommand
                 "This is not a valid Url.")
             .IsUrl(ImageUrl, "CreateProductCommand.ImageUrl",
                 "This is not a valid Url.")
-            .IsGreaterOrEqualsThan(SellValue, 0m, "CreateProductCommand.SellValue",
+            .IsGreaterOrEqualsThan(SellValue, 0m, "CreateProductCommand.Value",
                 "Sell value must not be lower or equals 0.")
-            .IsGreaterOrEqualsThan(BuyValue, 0m, "CreateProductCommand.BuyValue",
+            .IsGreaterOrEqualsThan(BuyValue, 0m, "CreateProductCommand.Cost",
                 "Buy value must not be lower than 0.")
             .IsGreaterOrEqualsThan(Percentage, 0m, "CreateProductCommand.Percentage",
                 "Percentage must not be lower than 0.")

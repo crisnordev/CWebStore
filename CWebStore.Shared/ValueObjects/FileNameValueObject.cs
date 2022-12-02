@@ -1,25 +1,23 @@
 ﻿namespace CWebStore.Shared.ValueObjects;
 
-public class FileName : ValueObject, IValidatable
+public class FileNameValueObject : NameBaseValueObject
 {
-    protected FileName() {}
+    protected FileNameValueObject() {}
 
-    public FileName(string name)
+    public FileNameValueObject(string name)
     {
-        Name = name.ToLower().Trim();
-        Validate();
+        Validate(name);
+        if (IsValid) EditorNameBase(name.ToLower().Trim());
     }
 
-    public string Name { get; private set; }
-
-    public void Validate()
+    public void Validate(string name)
     {
         AddNotifications(new Contract<string>()
-            .IsNotNullOrEmpty(Name, "FileName.Name",
+            .IsNotNullOrEmpty(name, "FileNameValueObject.Name",
                 "File name must not be null or empty.")
-            .IsLowerThan(6, Name.Length, "FileName.Name",
+            .IsLowerThan(6, name.Length, "FileNameValueObject.Name",
                 "File name must have between 2 and 60 characters long.")
-            .IsGreaterThan(60, Name.Length, "FileName.Name",
+            .IsGreaterThan(60, name.Length, "FileNameValueObject.Name",
                 "File name must have between 2 and 60 characters long."));
         
         if(!Name.EndsWith(".png") && IsValid)
@@ -28,8 +26,8 @@ public class FileName : ValueObject, IValidatable
 
     public void EditFileName(string name)
     {
-        Name = name;
-        Validate();
+        Validate(name);
+        if (IsValid) EditorNameBase(name.ToLower().Trim());
     }
 
     public override string ToString() => Name;

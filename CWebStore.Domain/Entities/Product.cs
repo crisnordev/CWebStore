@@ -4,52 +4,43 @@ public class Product : Entity, IValidatable
 {
     protected Product() { }
 
-    public Product(string id, string name, decimal value, int stockQuantity)
+    public Product(string id, string name, decimal value, int stockQuantity) : base(id)
     {
-        Id = new Guid(id);
-        Name = new ProductName(name);
-        Price = new Price(value);
-        StockQuantity = new Quantity(stockQuantity);
+        Name = new ProductNameValueObject(name);
+        Price = new PriceValueObject(value);
+        StockQuantity = new QuantityValueObject(stockQuantity);
         Validate();
     }
 
-    public sealed override Guid Id { get; protected set; }
+    public ProductNameValueObject Name { get; private set; }
 
-    public ProductName Name { get; private set; }
+    public PriceValueObject Price { get; private set; }
 
-    public Price Price { get; private set; }
+    public ProductCodeValueObject Code { get; private set; }
 
-    public string Code { get; set; }
+    public QuantityValueObject StockQuantity { get; private set; }
 
-    public Quantity StockQuantity { get; private set; }
+    public decimal NetWeight { get; private set; }
 
-    public decimal NetWeight { get; set; }
+    public decimal GrossWeight { get; private set; }
 
-    public decimal GrossWeight { get; set; }
+    public Guid CategoryId { get; private set; }
 
-    public Guid CategoryId { get; set; }
+    public Category Category { get; private set; }
 
-    public Category Category { get; set; }
+    public string UnitMeasure { get; private set; }
 
-    public string UnitMeasure { get; set; }
+    public FileNameValueObject ImageFileName { get; private set; }
 
-    public FileName ImageFileName { get; private set; }
-
-    public UrlString ImageUrl { get; private set; }
+    public UrlStringValueObject ImageUrl { get; private set; }
 
     public void Validate()
     {
-        AddNotifications(new Contract<string>()
-            .IsNotNullOrEmpty(Id.ToString(), "Product.Id",
-                "Product Id must not be null or empty.")
-            .AreEquals(Id, Guid.Empty, "Product.Id",
-                "Product Id must not be null or empty.")
-            .Join(Name, Price, StockQuantity));
+        AddNotifications(Name, Price, StockQuantity);
     }
 
     public void EditCategory(Category category)
     {
-        category.Validate();
         if (category.IsValid) Category = category;
         AddNotification("Product.EditCategory", "Can not add this category.");
     }
@@ -96,7 +87,7 @@ public class Product : Entity, IValidatable
 
     public void EditProductUrl(string url)
     {
-        ImageUrl.EditUrlPropertyString(url);
+        ImageUrl.EditUrl(url);
         
         if (!ImageUrl.IsValid)
             AddNotifications(ImageUrl);

@@ -15,11 +15,11 @@ public class CreateCategoryCommand : Notifiable<Notification>, ICommand
     public void Validate()
     {
         AddNotifications(new Contract<string>()
-            .IsNotNullOrEmpty(Name, "CreateCategoryCommand.Name",
+            .IsNotNullOrEmpty(Name, "CreateCategoryCommand.NameValueObject",
                 "Category name must not be null or empty.")
-            .IsLowerThan(2, Name.Length, "CreateCategoryCommand.Name",
+            .IsLowerThan(2, Name.Length, "CreateCategoryCommand.NameValueObject",
                 "Category name must have two or more characters.")
-            .IsGreaterOrEqualsThan(80, Name.Length, "CreateCategoryCommand.Name",
+            .IsGreaterOrEqualsThan(80, Name.Length, "CreateCategoryCommand.NameValueObject",
                 "Category name must have 80 or less characters."));
     }
 }

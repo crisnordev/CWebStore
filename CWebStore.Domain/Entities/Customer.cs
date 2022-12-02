@@ -2,37 +2,28 @@
 
 namespace CWebStore.Domain.Entities;
 
-public class Customer : Entity, IValidatable
+public class Customer : Entity
 {
-    public Guid Id { get; set; }
+    public Customer()
+    {
+    }
 
-    public string Name { get; set; }
+    public Customer(string id, string name, EPersonType personType) : base(id)
+    {
+        NameValueObject = new PersonNameValueObject(name);
+        PersonType = personType;
+    }
 
-    public string CompanyName { get; set; }
+    public PersonNameValueObject NameValueObject { get; set; }
 
-    public string Email { get; set; }
-
-    public string BusinessPhone { get; set; }
-
-    public string MobilePhone { get; set; }
-
+    public CompanyName CompanyName { get; set; }
+    
     public EPersonType PersonType { get; set; }
+    
+    public AddressValueObject Address { get; set; }
 
-    public string Document { get; set; }
-
-    public string IdentityDocument { get; set; }
-
-    public string StateRegistrationNumber { get; set; }
-
-    public EStateRegistrationType StateRegistrationType { get; set; }
-
-    public string CityRegistrationNumber { get; set; }
-
-    public DateTime DateOfBirth { get; set; }
-
-    public string Notes { get; set; }
-
-    public List<string> Contacts { get; set; }
-
-    public string Address { get; set; }
+    public void Validate()
+    {
+        
+    }
 }

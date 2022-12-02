@@ -1,34 +1,30 @@
 ﻿namespace CWebStore.Shared.ValueObjects
 {
-    public class ProductName : ValueObject, IValidatable
+    public class ProductNameValueObject : NameBaseValueObject
     {
-        protected  ProductName() {}
+        protected  ProductNameValueObject() {}
         
-        public ProductName(string name)
+        public ProductNameValueObject(string name)
         {
             Validate(name);
-            if (!IsValid) return; 
-            Name = name;
+            if (IsValid) EditorNameBase(name);
         }
-
-        public string Name { get; set; }
 
         public void Validate(string name)
         {
             AddNotifications(new Contract<string>()
-                .IsNotNullOrEmpty(name, "ProductName.Name",
+                .IsNotNullOrEmpty(name, "ProductNameValueObject.Name",
                     "Product name must not be null or empty.")
-                .IsLowerThan(2, name.Length, "ProductName.Name",
+                .IsLowerThan(2, name.Length, "ProductNameValueObject.Name",
                     "Product name must have between 2 and 120 characters long.")
-                .IsGreaterThan(120, name.Length, "ProductName.Name",
+                .IsGreaterThan(120, name.Length, "ProductNameValueObject.Name",
                     "Product name must have between 2 and 120 characters long."));
         }
 
         public void EditProductName(string name)
         {
             Validate(name);
-            if (!IsValid) return;
-            Name = name;
+            if (IsValid) EditorNameBase(name);
         }
 
         public override string ToString() => Name;

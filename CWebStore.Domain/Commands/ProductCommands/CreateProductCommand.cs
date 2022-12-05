@@ -1,95 +1,131 @@
-﻿namespace CWebStore.Domain.Commands.ProductCommands;
+﻿using CWebStore.Shared.Enums;
+
+namespace CWebStore.Domain.Commands.ProductCommands;
 
 public class CreateProductCommand : Notifiable<Notification>, ICommand
 {
     public CreateProductCommand() { }
-
-    public CreateProductCommand(string productName, string productDescription, string manufacturerName, decimal sellValue, int stockQuantity, string imageFileName, string imageUrl)
+    
+    public CreateProductCommand(string id, string name, decimal value)
     {
-        ProductName = productName;
-        ProductDescription = productDescription;
-        ManufacturerName = manufacturerName;
-        SellValue = sellValue;
-        StockQuantity = stockQuantity;
-        ImageFileName = imageFileName;
-        ImageUrl = imageUrl;
-        Validate();
+        Validate(id, name, value);
+        if (!IsValid) return;
+        Id = id;
+        Name = name;
+        Value = value;
     }
 
-
-    public CreateProductCommand(string productName, string productDescription, string manufacturerName, decimal buyValue, decimal percentage, int stockQuantity, string imageFileName, string imageUrl)
+    public CreateProductCommand(string id, string name, decimal value, decimal cost, string code, int availableStock, 
+        string unitMeasure, string imageFileName, string imageUrl, string categoryId, string categoryName)
     {
-        ProductName = productName;
-        ProductDescription = productDescription;
-        ManufacturerName = manufacturerName;
-        BuyValue = buyValue;
-        Percentage = percentage;
-        StockQuantity = stockQuantity;
+        Validate(id, name, value, cost, code, availableStock, unitMeasure, imageFileName, imageUrl, categoryId,
+            categoryName);
+        if (!IsValid) return;
+        Id = id;
+        Name = name;
+        Value = value;
+        Cost = cost;
+        Code = code;
+        AvailableStock = availableStock;
+        UnitMeasure = unitMeasure;
         ImageFileName = imageFileName;
         ImageUrl = imageUrl;
-        Validate();
-        if (BuyValue > 0)
-            SellValue = BuyValue + BuyValue * Percentage / 100;
+        CategoryId = categoryId;
+        CategoryName = categoryName;
     }
 
-    public string ProductName { get; set; }
-    
-    public string ProductDescription { get; set; }
-    
-    public string ManufacturerName { get; set; }
-    
-    public decimal SellValue { get; private set; }
+    public string Id { get; set; }
 
-    public decimal BuyValue { get; private set; }
-
-    public decimal Percentage { get; private set; }
+    public string Name { get; set; }
     
-    public int StockQuantity { get; set; }
+    public decimal Value { get; set; }
+
+    public decimal Cost { get; set; }
+
+    public string Code { get; set; }
+    
+    public int AvailableStock { get; set; }
+
+    public string UnitMeasure { get; set; }
     
     public string ImageFileName { get; set; }
 
     public string ImageUrl { get; set; }
 
-    public void Validate()
+    public string CategoryId { get; set; }
+
+    public string CategoryName { get; set; }
+    
+    public void Validate(string id, string name, decimal value)
     {
         AddNotifications(new Contract<CreateProductCommand>()
-            .IsNotNullOrEmpty(ProductName, "CreateProductCommand.ProductName",
+            .IsNotNullOrEmpty(id, "Entity.Id",
+                "Product Id must not be null or empty.")
+            .AreEquals(id, Guid.Empty, "Entity.Id",
+                "Product Id must not be null or empty.")
+            .IsNotNullOrEmpty(name, "ProductNameValueObject.Name",
                 "Product name must not be null or empty.")
-            .IsLowerThan(2, ProductName.Length, "CreateProductCommand.ProductName",
-                "Product name must have two or more characters.")
-            .IsGreaterThan(120, ProductName.Length, "CreateProductCommand.ProductName",
-                "Product name must have 120 or less characters.")
-            .IsNotNullOrEmpty(ProductDescription, "CreateProductCommand.ProductDescription",
-                "Product description must not be null or empty.")
-            .IsLowerThan(2, ProductDescription.Length, "CreateProductCommand.ProductDescription",
-                "Product description must have two or more characters.")
-            .IsGreaterThan(160, ProductDescription.Length, "CreateProductCommand.ProductDescription",
-                "Product description must have 160 or less characters.")
-            .IsNotNullOrEmpty(ManufacturerName, "CreateProductCommand.ManufacturerName",
-                "Manufacturer name must not be null or empty.")
-            .IsLowerThan(2, ManufacturerName.Length, "CreateProductCommand.ManufacturerName",
-                "Manufacturer name must have two or more characters.")
-            .IsGreaterOrEqualsThan(120, ManufacturerName.Length, "CreateProductCommand.ManufacturerName",
-                "Manufacturer name must have 120 or less characters.")
-            .IsNotNullOrEmpty(ImageFileName, "CreateProductCommand.ImageFileName",
+            .IsLowerThan(2, name.Length, "ProductNameValueObject.Name",
+                "Product name must have between 2 and 120 characters long.")
+            .IsGreaterThan(120, name.Length, "ProductNameValueObject.Name",
+                "Product name must have between 2 and 120 characters long.")
+            .IsGreaterOrEqualsThan(value, 0, "PriceValueObject.Value",
+                "Value must not be lower than 0."));
+    }
+
+    public void Validate(string id, string name, decimal value, decimal cost, string code, int availableStock, 
+        string unitMeasure, string imageFileName, string imageUrl, string categoryId, string categoryName)
+    {
+        AddNotifications(new Contract<object>()
+            .IsNotNullOrEmpty(id, "CreateProductCommand.Id",
+                "Product Id must not be null or empty.")
+            .AreEquals(id, Guid.Empty, "CreateProductCommand.Id",
+                "Product Id must not be null or empty.")
+            .IsNotNullOrEmpty(name, "CreateProductCommand.Name",
+                "Product name must not be null or empty.")
+            .IsLowerThan(2, name.Length, "CreateProductCommand.Name",
+                "Product name must have between 2 and 120 characters long.")
+            .IsGreaterThan(120, name.Length, "CreateProductCommand.Name",
+                "Product name must have between 2 and 120 characters long.")
+            .IsGreaterOrEqualsThan(value, 0, "CreateProductCommand.Value",
+                "Value must not be lower than 0.")
+            .IsGreaterOrEqualsThan(cost, 0, "CreateProductCommand.Cost",
+                "Cost must not be lower than 0.")
+            .IsNotNullOrEmpty(code, "CreateProductCommand.Code",
+                "Product code must not be null or empty.")
+            .IsLowerThan(1, code.Length, "CreateProductCommand.Code",
+                "Product code must have between 1 and 36 characters long.")
+            .IsGreaterThan(36, code.Length, "CreateProductCommand.Code",
+                "Product code must have between 1 and 36 characters long.")
+            .IsLowerThan(0, availableStock, "CreateProductCommand.AvailableStock", 
+                "Available stock must not be lower than 0.")
+            .IsGreaterThan(1000000, availableStock, "CreateProductCommand.AvailableStock", 
+                "Available stock must not be greater than 1000000")
+            .IsGreaterOrEqualsThan(availableStock, 0, "CreateProductCommand.StockAvailableStock",
+                "Quantity must not be lower or equals 0.")
+            .IsNotNullOrEmpty(unitMeasure, "CreateProductCommand.UnitMeasure",
+                "Product Id must not be null or empty.")
+            .IsNotNullOrEmpty(imageFileName, "CreateProductCommand.ImageFileName",
                 "File name must not be null or empty.")
-            .IsLowerThan(6, ImageFileName.Length, "CreateProductCommand.ImageFileName",
+            .IsLowerThan(6, imageFileName.Length, "CreateProductCommand.ImageFileName",
                 "File name must have two or more characters.")
-            .IsGreaterThan(60, ImageFileName.Length, "CreateProductCommand.ImageFileName",
+            .IsGreaterThan(60, imageFileName.Length, "CreateProductCommand.ImageFileName",
                 "File name must have 60 or less characters.")
-            .IsGreaterThan(2048, ImageUrl.Length, "CreateProductCommand.ImageUrl",
+            .IsGreaterThan(2048, imageUrl.Length, "CreateProductCommand.ImageUrl",
                 "Url must have 2048 or less characters.")
-            .IsUrlOrEmpty(ImageUrl, "CreateProductCommand.ImageUrl",
+            .IsUrlOrEmpty(imageUrl, "CreateProductCommand.ImageUrl",
                 "This is not a valid Url.")
-            .IsUrl(ImageUrl, "CreateProductCommand.ImageUrl",
+            .IsUrl(imageUrl, "CreateProductCommand.ImageUrl",
                 "This is not a valid Url.")
-            .IsGreaterOrEqualsThan(SellValue, 0m, "CreateProductCommand.Value",
-                "Sell value must not be lower or equals 0.")
-            .IsGreaterOrEqualsThan(BuyValue, 0m, "CreateProductCommand.Cost",
-                "Buy value must not be lower than 0.")
-            .IsGreaterOrEqualsThan(Percentage, 0m, "CreateProductCommand.Percentage",
-                "Percentage must not be lower than 0.")
-            .IsGreaterOrEqualsThan(StockQuantity, 0, "CreateProductCommand.StockQuantity",
-                "Quantity must not be lower or equals 0."));
+            .IsNotNullOrEmpty(categoryId, "CreateProductCommand.Id",
+                "Product Id must not be null or empty.")
+            .AreEquals(categoryId, Guid.Empty, "CreateProductCommand.Id",
+                "Product Id must not be null or empty.")
+            .IsNotNullOrEmpty(categoryName, "CreateProductCommand.Name",
+                "Product name must not be null or empty.")
+            .IsLowerThan(2, categoryName.Length, "CreateProductCommand.Name",
+                "Product name must have between 2 and 60 characters long.")
+            .IsGreaterThan(60, categoryName.Length, "CreateProductCommand.Name",
+                "Product name must have between 2 and 60 characters long."));
     }
 }

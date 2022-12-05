@@ -5,10 +5,11 @@ public class Category : Entity
     private readonly IList<Product> _products;
     protected Category() { }
 
-    public Category(string name)
+    public Category(string id, string name) : base(id)
     {
         var categoryName = new CategoryNameValueObject(name);
         Validate(categoryName);
+        if (!IsValid) return;
         Name = categoryName;
         _products = new List<Product>();
     }

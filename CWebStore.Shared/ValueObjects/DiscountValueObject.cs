@@ -9,15 +9,15 @@ public class DiscountValueObject : ValueObject
     {
     }
     
-    protected DiscountValueObject(EMeasureUnit measureUnit, decimal rate)
+    protected DiscountValueObject(EValueMeasureUnit valueMeasureUnit, decimal rate)
     {
         Validate(rate);
         if (!IsValid) return;
-        MeasureUnit = measureUnit;
+        ValueMeasureUnit = valueMeasureUnit;
         Rate = rate;
     }
 
-    public EMeasureUnit MeasureUnit { get; private set; }
+    public EValueMeasureUnit ValueMeasureUnit { get; private set; }
 
     public decimal Rate { get; private set; }
     
@@ -28,9 +28,9 @@ public class DiscountValueObject : ValueObject
                 "Value must not be lower than 0."));
     }
 
-    public void EditMeasureUnit(EMeasureUnit measureUnit) 
+    public void EditMeasureUnit(EValueMeasureUnit valueMeasureUnit) 
     {
-        if (IsValid) MeasureUnit = measureUnit;
+        if (IsValid) ValueMeasureUnit = valueMeasureUnit;
     }
 
     public void EditRate(decimal rate)

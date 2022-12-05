@@ -10,8 +10,9 @@ public class Payment : Entity
     {
     }
 
-    public Payment(string id, EPaymentType type, EPaymentMethod paymentMethod, IList<InstallmentsValueObject> installments) : base(id)
+    public Payment(string id, EPaymentType type, EPaymentMethod paymentMethod,IList<InstallmentsValueObject> installments) : base(id)
     {
+        _installments = new List<InstallmentsValueObject>();
         AddInstalments(installments);
         if (!IsValid) return;
         Type = type;

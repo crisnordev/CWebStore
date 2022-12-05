@@ -1,15 +1,31 @@
-﻿namespace CWebStore.Domain.Entities;
+﻿using CWebStore.Shared.Enums;
+
+namespace CWebStore.Domain.Entities;
 
 public class Product : Entity, IValidatable
 {
     protected Product() { }
 
-    public Product(string id, string name, decimal value, int stockQuantity) : base(id)
+    public Product(string id, string name, decimal value) : base(id)
     {
         Name = new ProductNameValueObject(name);
         Price = new PriceValueObject(value);
-        StockQuantity = new QuantityValueObject(stockQuantity);
         Validate();
+    }
+    
+    public Product(string id, string name, decimal value, decimal cost, string code, int availableStock, 
+        string unitMeasure, string imageFileName, string imageUrl, string categoryId, string categoryName) 
+        : base(id)
+    {
+        Name = new ProductNameValueObject(name);
+        Price = new PriceValueObject(value, cost);
+        AvailableStock = new AvailableStockValueObject(availableStock);
+        Code = new ProductCodeValueObject(code);
+        UnitMeasure = unitMeasure;
+        ImageFileName = new FileNameValueObject(imageFileName);
+        ImageUrl = new UrlStringValueObject(imageUrl);
+        CategoryId = new Guid(categoryId);
+        Category = new Category(categoryId, categoryName);
     }
 
     public ProductNameValueObject Name { get; private set; }
@@ -18,7 +34,7 @@ public class Product : Entity, IValidatable
 
     public ProductCodeValueObject Code { get; private set; }
 
-    public QuantityValueObject StockQuantity { get; private set; }
+    public AvailableStockValueObject AvailableStock { get; private set; }
 
     public decimal NetWeight { get; private set; }
 
@@ -36,13 +52,7 @@ public class Product : Entity, IValidatable
 
     public void Validate()
     {
-        AddNotifications(Name, Price, StockQuantity);
-    }
-
-    public void EditCategory(Category category)
-    {
-        if (category.IsValid) Category = category;
-        AddNotification("Product.EditCategory", "Can not add this category.");
+        AddNotifications(Name, Price, Code, AvailableStock, Category, ImageFileName, ImageUrl);
     }
 
     public void EditProductName(string name)
@@ -69,12 +79,12 @@ public class Product : Entity, IValidatable
             AddNotifications(Price);
     }
 
-    public void EditProductStockQuantity(int quantity)
+    public void EditProductAvailableStock(int quantity)
     {
-        StockQuantity.EditQuantityValue(quantity);
+        AvailableStock.EditQuantityValue(quantity);
         
-        if (!StockQuantity.IsValid)
-            AddNotifications(StockQuantity);
+        if (!AvailableStock.IsValid)
+            AddNotifications(AvailableStock);
     }
 
     public void EditProductFileName(string fileName)

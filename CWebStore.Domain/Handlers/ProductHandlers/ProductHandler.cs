@@ -13,27 +13,29 @@ public class ProductHandler : Notifiable<Notification>, IHandler<CreateProductCo
 
     public IResult Handle(CreateProductCommand command)
     {
-        command.Validate();
-        if(!command.IsValid)
+        if(!command.IsValid) return new Result(false, "This is not a valid Product.", command.Notifications.ToList());
+        if (_repository.ProductExists(command.Name)) return new Result(true, "This Product already exists.");
+
+        if (command.Cost > 0 || command.Code != null || command.AvailableStock > 0 || command.UnitMeasure != null 
+            || command.ImageFileName != null || command.ImageUrl != null || command.CategoryId != null
+            || command.CategoryName != null)
         {
-            return new Result(false, "This is not a valid Product.", 
-                command.Notifications.ToList());
+
+            var product = new Product(command.Id, command.Name, command.Value, command.Cost, command.Code,
+                command.AvailableStock, command.UnitMeasure, command.ImageFileName, command.ImageUrl,
+                command.CategoryId, command.CategoryName);
+            if (!product.IsValid) return new Result(false, "Can not save this Product.", product.Notifications.ToList());
+            _repository.PostProduct(product);
+            return new Result(true, "Product was successfully created.", product);
         }
 
-        if (_repository.ProductExists(command.ProductName))
-            return new Result(true, "This Product already exists.");
-
-        var product = new Product(new ProductName(command.ProductName), new Price(command.SellValue), 
-            new Quantity(command.StockQuantity), new Description(command.ProductDescription), 
-            new Manufacturer(command.ManufacturerName), new FileName(command.ImageFileName), 
-            new UrlString(command.ImageUrl));
-
-        if (!product.IsValid)
-            return new Result(false, "Can not save this Product.", 
-                product.Notifications.ToList());
-
-        _repository.PostProduct(product);
-        
-        return new Result(true, "Product was successfully created.", product);
+        else
+        {
+            var product = new Product(command.Id, command.Name, command.Value);
+            if (!product.IsValid) return new Result(false, "Can not save this Product.", product.Notifications.ToList());
+            _repository.PostProduct(product);
+            return new Result(true, "Product was successfully created.", product);
+        }
     }
 }
+

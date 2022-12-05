@@ -1,10 +1,10 @@
 namespace CWebStore.Shared.ValueObjects;
 
-public class QuantityValueObject : ValueObject
+public class AvailableStockValueObject : ValueObject
 {
-    protected QuantityValueObject() { }
+    protected AvailableStockValueObject() { }
 
-    public QuantityValueObject(int availableStock)
+    public AvailableStockValueObject(int availableStock)
     {
         Validate(availableStock);
         if (IsValid) AvailableStock = availableStock;
@@ -15,9 +15,9 @@ public class QuantityValueObject : ValueObject
     public void Validate(int availableStock)
     {
         AddNotifications(new Contract<decimal>()
-            .IsLowerThan(0, availableStock, "QuantityValueObject.AvailableStock", 
+            .IsLowerThan(0, availableStock, "AvailableStockValueObject.AvailableStock", 
                 "Available stock must not be lower than 0.")
-            .IsGreaterThan(1000000, availableStock, "QuantityValueObject.AvailableStock", 
+            .IsGreaterThan(1000000, availableStock, "AvailableStockValueObject.AvailableStock", 
                 "Available stock must not be greater than 1000000"));
     }
 

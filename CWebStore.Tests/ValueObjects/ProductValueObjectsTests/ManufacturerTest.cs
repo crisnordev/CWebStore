@@ -35,7 +35,7 @@ public class ManufacturerTest
     [TestCategory("CWebStore.Shared.ValueObjects")]
     public void Given_a_manufacturer_EditManufacturerName_invalid_should_return_error_message()
     {
-        var manufacturer = new Manufacturer("Valid Name");
+        var manufacturer = new Manufacturer("Valid NameValueObject");
         manufacturer.EditManufacturerName(string.Empty);
         var message = "Manufacturer name must not be null or empty.";
         Assert.AreEqual(message, manufacturer.Notifications.First().Message);
@@ -45,7 +45,7 @@ public class ManufacturerTest
     [TestCategory("CWebStore.Shared.ValueObjects")]
     public void Given_a_valid_manufacturer_should_return_IsValid()
     {
-        var manufacturer = new Manufacturer("Valid Name");
+        var manufacturer = new Manufacturer("Valid NameValueObject");
         Assert.IsTrue(manufacturer.IsValid);
     }
     
@@ -53,8 +53,8 @@ public class ManufacturerTest
     [TestCategory("CWebStore.Shared.ValueObjects")]
     public void Given_a_valid_manufacturer_EditManufacturerName_should_return_IsValid()
     {
-        var manufacturer = new Manufacturer("Valid Name");
-        manufacturer.EditManufacturerName("Another Valid Name");
+        var manufacturer = new Manufacturer("Valid NameValueObject");
+        manufacturer.EditManufacturerName("Another Valid NameValueObject");
         Assert.IsTrue(manufacturer.IsValid);
     }
 }

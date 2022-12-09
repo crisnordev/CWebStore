@@ -215,7 +215,7 @@ public class ProductTests
     [TestCategory("CWebStore.Domain.Entities")]
     public void Given_valid_product_EditProductStockQuantity_with_valid_value_should_return_IsValid()
     {
-        _product.StockQuantity.EditQuantityValue(1);
+        _product.StockAvailableStock.EditQuantityValue(1);
         Assert.IsTrue(_product.IsValid);
     }
     

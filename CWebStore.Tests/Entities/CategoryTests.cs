@@ -35,7 +35,7 @@ public class CategoryTests
     public void Given_a_valid_category_EditCategoryName_with_valid_name_should_return_IsValid()
     {
         var category = new Category(new CategoryName("Category name"));
-        category.CategoryName.EditCategoryName("New category Name");
+        category.CategoryName.EditCategoryName("New category NameValueObject");
         Assert.IsTrue(category.IsValid);
     }
 }

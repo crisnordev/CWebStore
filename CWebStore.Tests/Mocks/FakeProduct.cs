@@ -20,7 +20,7 @@ public class FakeProduct
         var product3 = new Product(new ProductName("Another product name"), new Price(10, 10),
             new Quantity(10), new Description("Description"), new Manufacturer("Manufacturer"),
             new FileName("file.png"), new UrlString("https://github.com"));
-        var category2 = new Category(new CategoryName("Name"));
+        var category2 = new Category(new CategoryName("NameValueObject"));
         var category3 = new Category(new CategoryName("New category")); 
         
         

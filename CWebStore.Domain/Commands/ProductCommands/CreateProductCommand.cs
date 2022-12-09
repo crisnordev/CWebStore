@@ -4,7 +4,7 @@ namespace CWebStore.Domain.Commands.ProductCommands;
 
 public class CreateProductCommand : Notifiable<Notification>, ICommand
 {
-    public CreateProductCommand() { }
+    protected CreateProductCommand() { }
     
     public CreateProductCommand(string id, string name, decimal value)
     {
@@ -15,21 +15,17 @@ public class CreateProductCommand : Notifiable<Notification>, ICommand
         Value = value;
     }
 
-    public CreateProductCommand(string id, string name, decimal value, decimal cost, string code, int availableStock, 
-        string unitMeasure, string imageFileName, string imageUrl, string categoryId, string categoryName)
+    public CreateProductCommand(string id, string name, decimal value, string code, int availableStock, 
+        string unitMeasure, string categoryId, string categoryName)
     {
-        Validate(id, name, value, cost, code, availableStock, unitMeasure, imageFileName, imageUrl, categoryId,
-            categoryName);
+        Validate(id, name, value, code, availableStock, unitMeasure, categoryId, categoryName);
         if (!IsValid) return;
         Id = id;
         Name = name;
         Value = value;
-        Cost = cost;
         Code = code;
         AvailableStock = availableStock;
         UnitMeasure = unitMeasure;
-        ImageFileName = imageFileName;
-        ImageUrl = imageUrl;
         CategoryId = categoryId;
         CategoryName = categoryName;
     }
@@ -40,17 +36,11 @@ public class CreateProductCommand : Notifiable<Notification>, ICommand
     
     public decimal Value { get; set; }
 
-    public decimal Cost { get; set; }
-
     public string Code { get; set; }
     
     public int AvailableStock { get; set; }
 
     public string UnitMeasure { get; set; }
-    
-    public string ImageFileName { get; set; }
-
-    public string ImageUrl { get; set; }
 
     public string CategoryId { get; set; }
 
@@ -73,8 +63,8 @@ public class CreateProductCommand : Notifiable<Notification>, ICommand
                 "Value must not be lower than 0."));
     }
 
-    public void Validate(string id, string name, decimal value, decimal cost, string code, int availableStock, 
-        string unitMeasure, string imageFileName, string imageUrl, string categoryId, string categoryName)
+    public void Validate(string id, string name, decimal value, string code, int availableStock, string unitMeasure, 
+        string categoryId, string categoryName)
     {
         AddNotifications(new Contract<object>()
             .IsNotNullOrEmpty(id, "CreateProductCommand.Id",
@@ -89,8 +79,6 @@ public class CreateProductCommand : Notifiable<Notification>, ICommand
                 "Product name must have between 2 and 120 characters long.")
             .IsGreaterOrEqualsThan(value, 0, "CreateProductCommand.Value",
                 "Value must not be lower than 0.")
-            .IsGreaterOrEqualsThan(cost, 0, "CreateProductCommand.Cost",
-                "Cost must not be lower than 0.")
             .IsNotNullOrEmpty(code, "CreateProductCommand.Code",
                 "Product code must not be null or empty.")
             .IsLowerThan(1, code.Length, "CreateProductCommand.Code",
@@ -105,18 +93,6 @@ public class CreateProductCommand : Notifiable<Notification>, ICommand
                 "Quantity must not be lower or equals 0.")
             .IsNotNullOrEmpty(unitMeasure, "CreateProductCommand.UnitMeasure",
                 "Product Id must not be null or empty.")
-            .IsNotNullOrEmpty(imageFileName, "CreateProductCommand.ImageFileName",
-                "File name must not be null or empty.")
-            .IsLowerThan(6, imageFileName.Length, "CreateProductCommand.ImageFileName",
-                "File name must have two or more characters.")
-            .IsGreaterThan(60, imageFileName.Length, "CreateProductCommand.ImageFileName",
-                "File name must have 60 or less characters.")
-            .IsGreaterThan(2048, imageUrl.Length, "CreateProductCommand.ImageUrl",
-                "Url must have 2048 or less characters.")
-            .IsUrlOrEmpty(imageUrl, "CreateProductCommand.ImageUrl",
-                "This is not a valid Url.")
-            .IsUrl(imageUrl, "CreateProductCommand.ImageUrl",
-                "This is not a valid Url.")
             .IsNotNullOrEmpty(categoryId, "CreateProductCommand.Id",
                 "Product Id must not be null or empty.")
             .AreEquals(categoryId, Guid.Empty, "CreateProductCommand.Id",

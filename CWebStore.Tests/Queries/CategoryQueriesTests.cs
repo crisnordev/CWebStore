@@ -27,7 +27,7 @@ public class CategoryQueriesTests
     [TestCategory("CWebStore.Domain.Queries")]
     public void Given_a_category_guid_with_no_products_GetCategoryProducts_should_return_empty_category_products()
     {
-        var category = _categories.FirstOrDefault(x => x.CategoryName.Name == "Name");
+        var category = _categories.FirstOrDefault(x => x.CategoryName.Name == "NameValueObject");
         var query = CategoryQueries.GetCategoryProducts(category.Id);
         var categoryProducts = _products.AsQueryable().Where(query).ToList();
         Assert.IsFalse(categoryProducts.Any(x => x.Categories.Any(y => y.Id == _category.Id)));

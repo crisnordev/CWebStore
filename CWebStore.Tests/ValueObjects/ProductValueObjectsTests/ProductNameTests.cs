@@ -54,7 +54,7 @@ public class ProductNameTests
     public void Given_a_valid_product_name_EditProductName_valid_should_return_IsValid()
     {
         var productName = new ProductName("Valid product name");
-        productName.EditProductName("Another valid Name");
+        productName.EditProductName("Another valid NameValueObject");
         Assert.IsTrue(productName.IsValid);
     }
 }

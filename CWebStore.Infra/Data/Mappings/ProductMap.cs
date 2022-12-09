@@ -21,13 +21,13 @@ public class ProductMap : IEntityTypeConfiguration<Product>
 
         builder.OwnsOne(x => x.Price)
             .Property(x => x.BuyValue)
-            .HasColumnName("BuyValue")
+            .HasColumnName("Cost")
             .HasColumnType("DECIMAL(18,2)")
             .HasPrecision(18, 2);
 
         builder.OwnsOne(x => x.Price)
             .Property(x => x.SellValue)
-            .HasColumnName("SellValue")
+            .HasColumnName("Value")
             .HasColumnType("DECIMAL(18,2)")
             .HasPrecision(18, 2)
             .IsRequired();
@@ -39,9 +39,9 @@ public class ProductMap : IEntityTypeConfiguration<Product>
             .HasPrecision(18, 2)
             .IsRequired();
 
-        builder.OwnsOne(x => x.StockQuantity)
-            .Property(x => x.QuantityValue)
-            .HasColumnName("StockQuantity")
+        builder.OwnsOne(x => x.StockAvailableStock)
+            .Property(x => x.AvailableStock)
+            .HasColumnName("StockAvailableStock")
             .HasColumnType("INT")
             .IsRequired();
 
@@ -94,7 +94,7 @@ public class ProductMap : IEntityTypeConfiguration<Product>
         builder.OwnsOne(x => x.Price)
             .Ignore(x => x.Notifications);
         
-        builder.OwnsOne(x => x.StockQuantity)
+        builder.OwnsOne(x => x.StockAvailableStock)
             .Ignore(x => x.Notifications);
         
         builder.OwnsOne(x => x.Description)

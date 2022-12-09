@@ -6,11 +6,11 @@ public static class ProductQueries
 {
     public static Expression<Func<Product, bool>> GetProductsInStock()
     {
-        return x => x.StockQuantity.QuantityValue > 0;
+        return x => x.StockAvailableStock.AvailableStock > 0;
     }
     
     public static Expression<Func<Product, bool>> GetProductsOutOfStock()
     {
-        return x => x.StockQuantity.QuantityValue <= 0;
+        return x => x.StockAvailableStock.AvailableStock <= 0;
     }
 }

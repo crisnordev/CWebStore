@@ -76,7 +76,7 @@ public class PriceTests
     [TestCategory("CWebStore.Shared.ValueObjects")]
     public void Given_a_valid_price_with_buyValue_and_percentage_should_return_IsValid_and_sellValue_correctly_calculated()
     {
-        Assert.IsTrue(_price.IsValid && _price.SellValue == 11M);
+        Assert.IsTrue(_price.IsValid && _price.Value == 11M);
     }
     
     [TestMethod]
@@ -101,7 +101,7 @@ public class PriceTests
     {
         _price.EditSellValue(0.50M);
 
-        Assert.IsTrue(_price.BuyValue == 0 && _price.Percentage == 0);
+        Assert.IsTrue(_price.Cost == 0 && _price.Percentage == 0);
     }
     
     [TestMethod]
@@ -109,7 +109,7 @@ public class PriceTests
     public void Given_a_valid_sell_price_EditBuyValue_should_return_IsValid_and_sellValue_correctly_calculated()
     {
         _price.EditBuyValue(2);
-        Assert.IsTrue(_price.IsValid && _price.SellValue == 2.20M);
+        Assert.IsTrue(_price.IsValid && _price.Value == 2.20M);
     }
     
     [TestMethod]
@@ -117,7 +117,7 @@ public class PriceTests
     public void Given_a_valid_price_EditPercentage_should_return_IsValid_and_sellValue_correctly_calculated()
     {
         _price.EditPercentage(20);
-        Assert.IsTrue(_price.IsValid && _price.SellValue == 12);
+        Assert.IsTrue(_price.IsValid && _price.Value == 12);
     }
         
     [TestMethod]
@@ -126,6 +126,6 @@ public class PriceTests
     {
         var price = new Price(10);
         price.EditPercentage(10);
-        Assert.IsTrue(price.SellValue == 0 && price.BuyValue == 0);
+        Assert.IsTrue(price.Value == 0 && price.Cost == 0);
     }
 }
